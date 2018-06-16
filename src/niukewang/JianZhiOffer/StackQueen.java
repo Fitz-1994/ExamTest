@@ -1,4 +1,4 @@
-package niukewang;
+package niukewang.JianZhiOffer;
 
 import java.util.Stack;
 

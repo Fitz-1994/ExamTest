@@ -1,6 +1,7 @@
-package niukewang;
+package niukewang.JianZhiOffer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -59,25 +60,6 @@ public class Solution {
         * 通过数组保存所有的值，再逆向输出
         * 该方法可以实现功能，但是存在内存溢出或超时
         * */
-        /*int[] normList = new int[1];
-        int i = 0;
-        while (listNode != null ){
-            if (normList.length >= i){
-                normList = new int[normList.length+1];
-            }
-            normList[i] = listNode.val;
-            i++;
-            listNode = listNode.next;
-        }
-        ArrayList<Integer> reverseList = new ArrayList<>();
-        if (i > 0) {
-            for (int j = i-1; j >= 0; j--) {
-                reverseList.add(normList[j]);
-            }
-        }
-        System.out.println(reverseList);
-        return reverseList;*/
-
         /*
         * 方法2通过用栈的方式通过全部测试用例
         * */
@@ -107,7 +89,7 @@ public class Solution {
     }
 
     /**
-     * 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+     * 4：输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
      * @param pre
      * @param in
      * @return
@@ -170,6 +152,53 @@ public class Solution {
             }
         }
         return nextPre;
+    }
+
+    /**
+     * 第6题：
+     * 把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。 输入一个非递减排序的数组的一个旋转，输出旋转数组的最小元素。 例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。 NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。
+     * @param array
+     * @return
+     * 不是很明白这个题目的精髓，因为一个数组，无论有没有旋转，最小值是一样的，所以这个题目就是一个求数组最小值的算法。
+     */
+    public int minNumberInRotateArray(int [] array) {
+        if (array.length == 0){
+            return 0;
+        }
+        int min = array[0];
+        for (int arrNum : array){
+            if (arrNum < min){
+                min = arrNum;
+            }
+        }
+        return min;
+    }
+
+    /**
+     * 第7题
+     * 大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项。
+     * n<=39
+     * @param n
+     * @return
+     */
+    public int Fibonacci(int n) {
+        List<Integer> fibnacci = new ArrayList<>();
+        //初始化最初的两个值
+        fibnacci.add(1);
+        fibnacci.add(1);
+        int fibnacciN = 0;
+        if (n == 1){
+            fibnacciN = 1;
+        }else if (n == 2){
+            fibnacciN = 1;
+        }else {
+            //大于2的情况
+            for (int i = 3;i<=n;i++){
+                fibnacci.add(fibnacci.get(i-3)+fibnacci.get(i-2));
+                fibnacciN = fibnacci.get(fibnacci.size()-1);
+            }
+        }
+        return fibnacciN;
     }
 
 
