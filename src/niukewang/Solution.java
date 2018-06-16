@@ -93,6 +93,10 @@ public class Solution {
         System.out.println(list);
         return list;
     }
+
+    /**
+     * 链表数据结构
+     */
     public class ListNode {
         int val;
         ListNode next = null;
@@ -100,6 +104,72 @@ public class Solution {
         ListNode(int val) {
             this.val = val;
         }
+    }
+
+    /**
+     * 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+     * @param pre
+     * @param in
+     * @return
+     * 该题已通过，利用递归的思想来解决
+     */
+    public TreeNode reConstructBinaryTree(int [] pre, int [] in) {
+        TreeNode root = new TreeNode(pre[0]);
+        int rootIndex = -1;
+        for (int i = 0;i<in.length;i++){
+            if (in[i] == root.val){
+                rootIndex = i;
+            }
+        }
+        int[] leftIn = new int[rootIndex];
+        int[] rightIn = new int[in.length-rootIndex-1];
+        for (int left=0;left<rootIndex;left++){
+            leftIn[left] = in[left];
+        }
+        for (int right=rootIndex+1;right<in.length;right++){
+            rightIn[right-(rootIndex+1)] = in[right];
+        }
+        int[] leftPre = getNextPre(leftIn,pre);
+        int[] rightPre = getNextPre(rightIn,pre);
+
+        if (leftIn.length==0){
+            root.left = null;
+        }else {
+            root.left = reConstructBinaryTree(leftPre,leftIn);
+        }
+        if (rightIn.length ==0){
+            root.right = null;
+        }else {
+            root.right = reConstructBinaryTree(rightPre,rightIn);
+        }
+        return root;
+    }
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
+    }
+
+    /**
+     * 通过下一级的中序遍历数组和上一级的前序遍历数组，得到下一级的前序遍历数组
+     * @param nextIn
+     * @param pre
+     * @return
+     */
+    public int[] getNextPre(int[] nextIn,int[] pre){
+        int[] nextPre = new int[nextIn.length];
+        int index = 0;
+        for (int preNum : pre){
+            for (int nextInNum : nextIn){
+                if (preNum == nextInNum){
+                    nextPre[index] = nextInNum;
+                    index++;
+                    break;
+                }
+            }
+        }
+        return nextPre;
     }
 
 
