@@ -1,6 +1,7 @@
 package niukewang;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * @author forward
@@ -58,19 +59,16 @@ public class Solution {
         * 通过数组保存所有的值，再逆向输出
         * 该方法可以实现功能，但是存在内存溢出或超时
         * */
-        int[] normList = new int[1];
+        /*int[] normList = new int[1];
         int i = 0;
-        while (listNode != null && listNode.next != null){
+        while (listNode != null ){
             if (normList.length >= i){
                 normList = new int[normList.length+1];
             }
             normList[i] = listNode.val;
             i++;
+            listNode = listNode.next;
         }
-        /*ArrayList<Integer> normList = new ArrayList<>();
-        while (listNode != null && listNode.next != null){
-            normList.add(listNode.val);
-        }*/
         ArrayList<Integer> reverseList = new ArrayList<>();
         if (i > 0) {
             for (int j = i-1; j >= 0; j--) {
@@ -78,7 +76,22 @@ public class Solution {
             }
         }
         System.out.println(reverseList);
-        return reverseList;
+        return reverseList;*/
+
+        /*
+        * 方法2通过用栈的方式通过全部测试用例
+        * */
+        Stack<Integer> stack = new Stack<>();
+        while (listNode != null){
+            stack.push(listNode.val);
+            listNode = listNode.next;
+        }
+        ArrayList<Integer> list = new ArrayList<>();
+        while (!stack.empty()){
+            list.add(stack.pop());
+        }
+        System.out.println(list);
+        return list;
     }
     public class ListNode {
         int val;
