@@ -201,6 +201,26 @@ public class Solution {
         return fibnacciN;
     }
 
+    /**
+     * 题8
+     * 一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。
+     * @param target
+     * @return
+     * 已通过
+     * 解题思路：递归
+     * 1级的时候只有一次，2级的时候只有两次
+     * 青蛙的第一步有两种情况，跳1级和跳2级，那么n级台阶的跳法就可以分解为 n-1级数量+n-2级的数量
+     */
+    public int jumpFloor(int target) {
+        if (target == 1){
+            return 1;
+        }else if (target == 2){
+            return 2;
+        }else {
+            return jumpFloor(target-1)+jumpFloor(target-2);
+        }
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
