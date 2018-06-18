@@ -243,6 +243,25 @@ public class Solution {
         }
     }
 
+    /**
+     * 题10：矩形覆盖
+     * 我们可以用2*1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2*1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？
+     * 分析题目可得，这个题实际上就是普通青蛙跳
+     * @param target
+     * @return
+     */
+    public int RectCover(int target) {
+        if (target == 1){
+            return 1;
+        }else if (target == 2){
+            return 2;
+        }else if (target == 0){
+            return 0;
+        }else{
+            return RectCover(target-1)+RectCover(target-2);
+        }
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -252,7 +271,8 @@ public class Solution {
 
         //题目3的测试代码
         //ListNode listNode = new ListNode(1);
-        ArrayList<Integer> list = printListFromTailToHead(null);
-
+        //ArrayList<Integer> list = printListFromTailToHead(null);
+        Solution solution = new Solution();
+        System.out.println(solution.RectCover(10));
     }
 }
