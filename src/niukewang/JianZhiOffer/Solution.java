@@ -262,6 +262,104 @@ public class Solution {
         }
     }
 
+    /**
+     * 题11：
+     * 输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。
+     * 已完成，使用Integer的toBinaryString转换整形为二进制字符串
+     * @param n
+     * @return
+     */
+    public int NumberOf1(int n) {
+        String binary = Integer.toBinaryString(n);
+        char[] binaryChar = binary.toCharArray();
+        int count = 0;
+        for (char bit : binaryChar){
+            if (bit == '1'){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 题12：
+     * 给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+     * 已通过，分两种情况，指数为正和指数为负
+     * @param base
+     * @param exponent
+     * @return
+     */
+    public double Power(double base, int exponent) {
+        if (exponent>=0) {
+            double result = 1.0;
+            for (int i = 0; i < exponent; i++) {
+                result *= base;
+            }
+            return result;
+        }else {
+            double reBase = 1.0/base;
+            int reExp = -exponent;
+            double result = reBase;
+            for (int i = 1; i < reExp; i++) {
+                result *= reBase;
+            }
+            return result;
+        }
+    }
+
+    /**
+     * 题13：
+     * 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+     * 已解决
+     * @param array
+     */
+    public void reOrderArray(int [] array) {
+        if (array.length != 0){
+            int[] tempArr = new int[array.length];
+            //遍历两遍数组,第一遍奇数、第二遍偶数
+            int index = 0;
+            for (int num: array){
+                if (num % 2 == 1){
+                    tempArr[index] = num;
+                    index++;
+                }
+            }
+            for (int num:array){
+                if (num % 2 == 0){
+                    tempArr[index] = num;
+                    index++;
+                }
+            }
+            for (int i=0;i<tempArr.length;i++){
+                array[i] = tempArr[i];
+            }
+        }
+    }
+
+    /**
+     * 题14
+     * 输入一个链表，输出该链表中倒数第k个结点。
+     * 已完成
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode FindKthToTail(ListNode head,int k) {
+        ArrayList<ListNode> listNodes = new ArrayList<>();
+        ListNode node = head;
+        //将所有的链表节点放入一个顺序表中
+        while (node != null){
+            listNodes.add(node);
+            node = node.next;
+        }
+        ListNode listNode = null;
+        //分为两种情况来区分,如果包含倒数第k个节点，则返回这个节点，如果不包含，则返回空
+        if (listNodes.size() >= k && k != 0){
+            listNode = listNodes.get(listNodes.size()-k);
+        }
+        return listNode;
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -273,6 +371,7 @@ public class Solution {
         //ListNode listNode = new ListNode(1);
         //ArrayList<Integer> list = printListFromTailToHead(null);
         Solution solution = new Solution();
-        System.out.println(solution.RectCover(10));
+        //System.out.println(solution.Power(2,-3));
+
     }
 }
