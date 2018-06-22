@@ -76,17 +76,6 @@ public class Solution {
         return list;
     }
 
-    /**
-     * 链表数据结构
-     */
-    public class ListNode {
-        int val;
-        ListNode next = null;
-
-        ListNode(int val) {
-            this.val = val;
-        }
-    }
 
     /**
      * 4：输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
@@ -126,12 +115,7 @@ public class Solution {
         }
         return root;
     }
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode(int x) { val = x; }
-    }
+
 
     /**
      * 通过下一级的中序遍历数组和上一级的前序遍历数组，得到下一级的前序遍历数组
@@ -360,6 +344,131 @@ public class Solution {
         return listNode;
     }
 
+    /**
+     * 题15
+     * 输入一个链表，反转链表后，输出链表的所有元素。
+     * 已完成
+     * @param head
+     * @return
+     */
+    public ListNode ReverseList(ListNode head) {
+        if (head == null){
+            return null;
+        }
+        if (head.next == null){
+            return head;
+        }
+        if (head.next.next == null){
+            ListNode reverHead = head.next;
+            reverHead.next = head;
+            head.next = null;
+            return reverHead;
+        }
+        ListNode first = head;
+        ListNode second = first.next;
+        ListNode third = second.next;
+        //第一步将头指针置为空
+        first.next = null;
+        do {
+            second.next = first;
+            first = second;
+            second = third;
+            third = third.next;
+        }while (third != null);
+        second.next = first;
+        return second;
+    }
+
+    /**
+     * 题16
+     * 输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+     * 已完成
+     * @param list1
+     * @param list2
+     * @return
+     */
+    public ListNode Merge(ListNode list1,ListNode list2) {
+        ListNode mergeHead = new ListNode(1);
+        ListNode tempList1 = list1;
+        ListNode tempList2 = list2;
+        //确定合并链表头
+        if (list1 != null && list2 != null){
+            if (list1.val>list2.val){
+                mergeHead = list2;
+                tempList2 = list2.next;
+            }else {
+                mergeHead = list1;
+                tempList1 = list1.next;
+            }
+            //如果参数中的其中一个链表是null，则返回另一个链表，如果两个都是null，返回null
+        }else if (list2 == null){
+            return list1;
+        }else if (list1 == null){
+            return list2;
+        }
+        ListNode merge = mergeHead;
+        //循环穿线
+        while (tempList1!=null && tempList2!=null){
+            if (tempList1.val < tempList2.val){
+                merge.next = tempList1;
+                tempList1 = tempList1.next;
+            }else {
+                merge.next = tempList2;
+                tempList2 = tempList2.next;
+            }
+            merge = merge.next;
+        }
+        //结尾阶段，有一个表已经遍历完了
+        if (tempList1 == null){
+            merge.next = tempList2;
+        }else if (tempList2 == null){
+            merge.next = tempList1;
+        }
+        return mergeHead;
+    }
+
+    /**
+     * 题17
+     * 输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+     * root2是否是root1的子结构，如果是返回true，不是返回false
+     * 完成
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public boolean HasSubtree(TreeNode root1,TreeNode root2) {
+        if (root2 == null){
+            return false;
+        }
+        if (root1 == null){
+            return false;
+        }
+        //两个二叉树都不为空
+        return confirm(root1,root2) || confirm(root1.left,root2) || confirm(root1.right,root2);
+    }
+
+    /**
+     * confirm方法的作用就是查看root1是否包含root2
+     * @param tree1
+     * @param tree2
+     * @return
+     */
+    public boolean confirm(TreeNode tree1, TreeNode tree2){
+        //如果tree2是空，则说明比较完了，是true
+        if (tree2 == null){
+            return true;
+        }
+        //tree2不为空，tree1为空，返回false
+        if (tree1 == null){
+            return false;
+        }
+        //都不为空，比较两者的值
+        if (tree1.val == tree2.val){
+            return confirm(tree1.left,tree2.left) && confirm(tree1.right,tree2.right);
+        }else {
+            return false;
+        }
+    }
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -372,6 +481,46 @@ public class Solution {
         //ArrayList<Integer> list = printListFromTailToHead(null);
         Solution solution = new Solution();
         //System.out.println(solution.Power(2,-3));
-
+        /*ListNode l1 = new ListNode(1);
+        ListNode l2 = new ListNode(2);
+        ListNode l3 = new ListNode(4);
+        ListNode l4 = new ListNode(5);
+        ListNode l5 = new ListNode(7);
+        l1.next = l2;
+        l2.next = l3;
+        l3.next = l4;
+        l4.next = l5;
+        ListNode r1 = new ListNode(3);
+        ListNode r2 = new ListNode(6);
+        ListNode r3 = new ListNode(7);
+        ListNode r4 = new ListNode(8);
+        ListNode r5 = new ListNode(9);
+        r1.next = r2;
+        r2.next = r3;
+        r3.next = r4;
+        r4.next = r5;
+        solution.Merge(l1,r1);*/
+        
+        TreeNode l1 = new TreeNode(8);
+        TreeNode l2 = new TreeNode(8);
+        TreeNode l3 = new TreeNode(7);
+        TreeNode l4 = new TreeNode(9);
+        TreeNode l5 = new TreeNode(2);
+        TreeNode l6 = new TreeNode(4);
+        TreeNode l7 = new TreeNode(7);
+        TreeNode r1 = new TreeNode(8);
+        TreeNode r2 = new TreeNode(9);
+        TreeNode r3 = new TreeNode(2);
+        TreeNode r4 = new TreeNode(4);
+        l1.left = l2;
+        l1.right = l3;
+        l2.left = l4;
+        l2.right = l5;
+        l5.left = l6;
+        l5.right = l7;
+        r1.left = r2;
+        r1.right = r3;
+        r3.left = r4;
+        System.out.println(solution.HasSubtree(l1,r1));
     }
 }
