@@ -470,6 +470,108 @@ public class Solution {
         }
     }
 
+    /**
+     * 题目18
+     操作给定的二叉树，将其变换为源二叉树的镜像。
+     输入描述:
+     二叉树的镜像定义：源二叉树
+          8
+        /   \
+       6    10
+      / \  / \
+     5  7 9  11
+     镜像二叉树
+          8
+        /  \
+       10   6
+      / \  / \
+     11 9 7  5
+
+     完成，递归思想
+     * @param root
+     */
+    public void Mirror(TreeNode root) {
+        if (root != null){
+            TreeNode temp = root.left;
+            root.left = root.right;
+            root.right = temp;
+            Mirror(root.left);
+            Mirror(root.right);
+        }
+    }
+
+    /**
+     * 题19
+     * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+     * 通过，贼尼玛难
+     * 四个方向，逐个分析
+     * @param matrix
+     * @return
+     */
+    public ArrayList<Integer> printMatrix(int [][] matrix) {
+        ArrayList<Integer> layout = new ArrayList<>();
+        //首先数组为空，返回空表
+        if (matrix.length == 0){
+            return layout;
+        }
+        //每次输出的范围
+        int rowLeft = 0;
+        int rowRight = matrix[0].length -1;
+        int columnUp = 0;
+        int columnDown = matrix.length -1;
+        //direction方向，方向顺序为 右下左上 循环，每次循环direction值加1，判断时做取余判断，余数为0 1 2 3 分别为右下左上
+        int direction = 0;
+        //两个index值表示目前输出的位置
+        int rowIndex = 0;
+        int columnIndex = 0;
+        while (rowLeft <= rowRight && columnUp <= columnDown){
+            //方向为右
+            if (direction % 4 == 0){
+                for (int i=rowLeft;i<rowRight+1;i++){
+                    layout.add(matrix[rowIndex][i]);
+                    columnIndex++;
+                }
+                columnIndex--;
+                rowIndex++;
+                columnUp++;
+            } else
+            //方向为下
+            if (direction % 4 == 1){
+                for (int i=columnUp;i<columnDown+1;i++){
+                    layout.add(matrix[i][columnIndex]);
+                    rowIndex++;
+                }
+                rowIndex--;
+                columnIndex--;
+                rowRight--;
+            } else
+            //方向为左
+            if (direction % 4 == 2){
+                for (int i=rowRight;i>rowLeft-1;i--){
+                    layout.add(matrix[rowIndex][i]);
+                    columnIndex--;
+                }
+                columnIndex++;
+                rowIndex--;
+                columnDown--;
+            } else
+            //方向为上
+            if (direction % 4 == 3){
+                for (int i=columnDown;i>columnUp-1;i--){
+                    layout.add(matrix[i][columnIndex]);
+                    rowIndex--;
+                }
+                rowIndex++;
+                columnIndex++;
+                rowLeft++;
+            }
+            //更换方向
+            direction++;
+        }
+        return layout;
+    }
+
+
     public static void main(String[] args) {
         //题目2的测试代码
         /*StringBuffer str = new StringBuffer("helloworld ");
@@ -501,7 +603,7 @@ public class Solution {
         r4.next = r5;
         solution.Merge(l1,r1);*/
         
-        TreeNode l1 = new TreeNode(8);
+/*        TreeNode l1 = new TreeNode(8);
         TreeNode l2 = new TreeNode(8);
         TreeNode l3 = new TreeNode(7);
         TreeNode l4 = new TreeNode(9);
@@ -521,6 +623,8 @@ public class Solution {
         r1.left = r2;
         r1.right = r3;
         r3.left = r4;
-        System.out.println(solution.HasSubtree(l1,r1));
+        System.out.println(solution.HasSubtree(l1,r1));*/
+        int[][] arr = {{1,2,3,4,5},{6,7,8,9,10},{11,12,13,14,15},{16,17,18,19,20}};
+        System.out.println(solution.printMatrix(arr));
     }
 }
