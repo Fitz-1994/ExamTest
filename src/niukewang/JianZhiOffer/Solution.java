@@ -1,8 +1,6 @@
 package niukewang.JianZhiOffer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author forward
@@ -571,6 +569,76 @@ public class Solution {
         return layout;
     }
 
+    /**
+     *
+     * 题20
+     输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4，5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）
+     完成
+     * @param pushA
+     * @param popA
+     * @return
+     */
+    public boolean IsPopOrder(int [] pushA,int [] popA) {
+        ArrayList<Integer> allowList = new ArrayList<>();
+        int index = 0;
+        for (int num : pushA){
+            allowList.add(num);
+        }
+        boolean isPopOrder = true;
+        for (int i=0;i<popA.length;i++){
+            boolean contain = false;
+            for (int j=index;j<allowList.size();j++){
+                if (allowList.get(j) == popA[i]){
+                    index = j;
+                    contain = true;
+                    break;
+                }
+            }
+            if (contain){
+                allowList.remove(index);
+                if (index != 0){
+                    index--;
+                }
+            }else {
+                isPopOrder = false;
+            }
+
+
+        }
+        return isPopOrder;
+    }
+
+    /**
+     * 题21
+     * 从上往下打印出二叉树的每个节点，同层节点从左至右打印。
+     * 完成
+     * @param root
+     * @return
+     */
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        ArrayList<Integer> list = new ArrayList<>();
+        if (root == null){
+            return list;
+        }
+        //在队列中添加根节点
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            TreeNode tempRoot = queue.element();
+            TreeNode left = tempRoot.left;
+            TreeNode right = tempRoot.right;
+            if (left != null){
+                queue.offer(left);
+            }
+            if (right != null){
+                queue.offer(right);
+            }
+            list.add(tempRoot.val);
+            queue.poll();
+        }
+        return list;
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -603,7 +671,7 @@ public class Solution {
         r4.next = r5;
         solution.Merge(l1,r1);*/
         
-/*        TreeNode l1 = new TreeNode(8);
+        TreeNode l1 = new TreeNode(8);
         TreeNode l2 = new TreeNode(8);
         TreeNode l3 = new TreeNode(7);
         TreeNode l4 = new TreeNode(9);
@@ -623,8 +691,12 @@ public class Solution {
         r1.left = r2;
         r1.right = r3;
         r3.left = r4;
-        System.out.println(solution.HasSubtree(l1,r1));*/
-        int[][] arr = {{1,2,3,4,5},{6,7,8,9,10},{11,12,13,14,15},{16,17,18,19,20}};
-        System.out.println(solution.printMatrix(arr));
+        //System.out.println(solution.HasSubtree(l1,r1));
+        //int[][] arr = {{1,2,3,4,5},{6,7,8,9,10},{11,12,13,14,15},{16,17,18,19,20}};
+        //System.out.println(solution.printMatrix(arr));
+        /*int[] push = {1,2,3,4,5};
+        int[] pop = {3,1,2,5,4};
+        System.out.println(solution.IsPopOrder(push,pop));*/
+        System.out.println(solution.PrintFromTopToBottom(l1));
     }
 }
