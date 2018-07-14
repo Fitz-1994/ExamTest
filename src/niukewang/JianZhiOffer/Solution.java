@@ -639,6 +639,63 @@ public class Solution {
         return list;
     }
 
+    /**
+     * 题22
+     * 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+     * 该题未解决
+     * @param sequence
+     * @return
+     */
+    public boolean VerifySquenceOfBST(int [] sequence) {
+
+        if (sequence.length == 1){
+            return true;
+        }else if (sequence.length == 0){
+            return false;
+        }
+        //index值用于表示在序列中第一个比last节点大的节点的位置
+        int index = 0;
+        int last = sequence[sequence.length-1];
+        boolean result = true;
+        for (int i=0;i<sequence.length;i++){
+            if (sequence[i]>=last){
+                index = i;
+                break;
+            }
+        }
+        int[] smaller = new int[index];
+        int[] bigger = new int[sequence.length - index-1];
+
+        for (int i=0;i<index;i++){
+            smaller[i] = sequence[i];
+        }
+        for (int i=0;i<bigger.length;i++){
+            bigger[i] = sequence[i+index];
+            if (bigger[i]<last){
+                result = false;
+                break;
+            }
+        }
+        if (result){
+            //判断切分后数组的大小
+            if (smaller.length>0){
+                if (bigger.length>0){
+                    return VerifySquenceOfBST(smaller) && VerifySquenceOfBST(bigger);
+                }else {
+                    return VerifySquenceOfBST(smaller);
+                }
+            }else{
+                if (bigger.length>0){
+                    return VerifySquenceOfBST(bigger);
+                }else {
+                    return true;
+                }
+            }
+        }else {
+            return result;
+        }
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -697,6 +754,7 @@ public class Solution {
         /*int[] push = {1,2,3,4,5};
         int[] pop = {3,1,2,5,4};
         System.out.println(solution.IsPopOrder(push,pop));*/
-        System.out.println(solution.PrintFromTopToBottom(l1));
+        int[] arr = {4,6,7,5};
+        System.out.println(solution.VerifySquenceOfBST(arr));
     }
 }
