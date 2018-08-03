@@ -1,5 +1,6 @@
 package niukewang.JianZhiOffer;
 
+
 import java.util.*;
 
 /**
@@ -642,7 +643,6 @@ public class Solution {
     /**
      * 题22
      * 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
-     * 该题未解决
      * @param sequence
      * @return
      */
@@ -694,6 +694,106 @@ public class Solution {
         }else {
             return result;
         }
+    }
+
+    /**题23
+     * 输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+     * 输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。
+     * @param str
+     * @return
+     */
+    public ArrayList<String> Permutation(String str) {
+        char[] strChars = str.toCharArray();
+        bubble(strChars);
+        System.out.println(strChars);
+        ArrayList<String> result = recursive("",strChars);
+        return result;
+    }
+
+    /**
+     * 递归程序
+     * @param str
+     * @param leftChars
+     * @return
+     */
+    public ArrayList<String> recursive(String str, char[] leftChars){
+        char[] strChars = str.toCharArray();
+        ArrayList<String> result = new ArrayList<>();
+        if (leftChars.length == 1){
+            char[] resultChars = new char[strChars.length+1];
+            for (int i=0;i<strChars.length;i++){
+                resultChars[i] = strChars[i];
+            }
+            resultChars[strChars.length] = leftChars[0];
+            String resultString  = new String(resultChars);
+            result.add(resultString);
+            return result;
+        }
+
+        ArrayList<Character> unduplicateList = unDuplicate(leftChars);
+        for (Character c : unduplicateList){
+            char[] newStrChars = new char[strChars.length+1];
+            for (int i=0;i<strChars.length;i++){
+                newStrChars[i] = strChars[i];
+            }
+            newStrChars[strChars.length] = c;
+            String newStr = new String(newStrChars);
+            char[] newLeftChars = new char[leftChars.length-1];
+            boolean deleted = false;
+            for (int i=0;i<leftChars.length;i++){
+                if (deleted){
+                    newLeftChars[i-1] = leftChars[i];
+                }else {
+                    if (leftChars[i] == c){
+                        deleted = true;
+                    }else {
+                        newLeftChars[i] = leftChars[i];
+                    }
+                }
+            }
+            ArrayList<String> nextRound = recursive(newStr,newLeftChars);
+            result.addAll(nextRound);
+        }
+        return result;
+    }
+
+    /**
+     * 去除重复的字符
+     * @param chars
+     * @return
+     */
+    public ArrayList<Character> unDuplicate(char[] chars){
+        ArrayList<Character> unDuplicateList = new ArrayList<>();
+        for (char c : chars){
+            if (!unDuplicateList.contains(c)){
+                unDuplicateList.add(c);
+            }
+        }
+        return unDuplicateList;
+    }
+
+    /**
+     * 字符冒泡排序
+     * @param arr
+     * @return
+     */
+    public void bubble(char[] arr){
+        //这里i表示的是已经确定位置的个数，j表示本次要比较的数的位置，比较j和j+1位置上的数
+        for (int i=0;i<arr.length;i++){
+            for (int j=0;j<arr.length-1-i;j++){
+                //判断这两个是否是反序
+                if (arr[j]>arr[j+1]){
+                    exchange(arr,j,j+1);
+                }
+            }
+        }
+    }
+
+    public char[] exchange(char[] arr,int index1 ,int index2){
+        char temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
+        return arr;
     }
 
 
@@ -755,6 +855,7 @@ public class Solution {
         int[] pop = {3,1,2,5,4};
         System.out.println(solution.IsPopOrder(push,pop));*/
         int[] arr = {4,6,7,5};
-        System.out.println(solution.VerifySquenceOfBST(arr));
+        char[] chars = {'a','a','b','c'};
+        System.out.println(solution.Permutation("baca"));
     }
 }
