@@ -796,6 +796,116 @@ public class Solution {
         return arr;
     }
 
+    /**
+     * 题24
+     * 数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。
+     * 已完成
+     * @param array
+     * @return
+     */
+    public int MoreThanHalfNum_Solution(int [] array) {
+        if (array.length == 0){
+            return 0;
+        }
+        if (array.length == 1){
+            return array[0];
+        }
+        int index = 0;
+        int divisonArray = upperDivision(array.length);
+        int[][] numTime = new int[divisonArray][2];
+        boolean hasEqualNum;
+        boolean boom = false;
+        for (int a : array){
+            hasEqualNum = false;
+            for (int i = 0;i < index;i++){
+                //在二维数组中找到相等的值
+                if (a == numTime[i][0]) {
+                    numTime[i][1]++;
+                    hasEqualNum = true;
+                    break;
+                }
+            }
+            //在二维数组中没有找到相等的值
+            if (!hasEqualNum){
+                if (index >= divisonArray){
+                    boom = true;
+                    break;
+                }
+                numTime[index][0] = a;
+                numTime[index][1] = 1;
+                index++;
+            }
+        }
+        if (boom){
+            return 0;
+        }else {
+            int returnNum = 0;
+            for (int i=0;i<divisonArray;i++){
+                if (numTime[i][1]*2 > array.length){
+                    returnNum = numTime[i][0];
+                }
+            }
+            return returnNum;
+        }
+    }
+
+    /**
+     * 该方法为一个整数除以二向上取整
+     * @param a
+     * @return
+     */
+    public int upperDivision(int a){
+        if (a%2 == 0){
+            return a/2;
+        }else {
+            return (a+1)/2;
+        }
+    }
+
+    /**
+     * 题25
+     * 输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4,。
+     * 已完成
+     * @param input
+     * @param k
+     * @return
+     */
+    public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
+        ArrayList<Integer> minNbrs = new ArrayList<>();
+        if (k>input.length){
+            return minNbrs;
+        }
+        bubble(input);
+        for (int i=0;i<k;i++){
+            minNbrs.add(input[i]);
+        }
+        return minNbrs;
+    }
+
+    /**
+     * 冒泡排序
+     * @param arr
+     * @return
+     */
+    public void bubble(int[] arr){
+        //这里i表示的是已经确定位置的个数，j表示本次要比较的数的位置，比较j和j+1位置上的数
+        for (int i=0;i<arr.length;i++){
+            for (int j=0;j<arr.length-1-i;j++){
+                //判断这两个是否是反序
+                if (arr[j]>arr[j+1]){
+                    exchange(arr,j,j+1);
+                }
+            }
+        }
+    }
+
+    public int[] exchange(int[] arr,int index1 ,int index2){
+        int temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
+        return arr;
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -854,8 +964,8 @@ public class Solution {
         /*int[] push = {1,2,3,4,5};
         int[] pop = {3,1,2,5,4};
         System.out.println(solution.IsPopOrder(push,pop));*/
-        int[] arr = {4,6,7,5};
+        int[] arr = {1,3,4,5,2,2,2,2,2};
         char[] chars = {'a','a','b','c'};
-        System.out.println(solution.Permutation("baca"));
+        System.out.println(solution.MoreThanHalfNum_Solution(arr));
     }
 }
