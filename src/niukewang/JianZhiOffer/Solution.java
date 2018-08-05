@@ -906,6 +906,63 @@ public class Solution {
         return arr;
     }
 
+    /**
+     *
+     * 题26
+     HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。
+     今天测试组开完会后,他又发话了:在古老的一维模式识别中,常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。
+     但是,如果向量中包含负数,是否应该包含某个负数,并期望旁边的正数会弥补它呢？例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。
+     给一个数组，返回它的最大连续子序列的和，你会不会被他忽悠住？(子向量的长度至少是1)
+     * 动态规划法解题，受到评论区指导
+     * 解题思路：
+     * F(x) 表示在下标为x的位置上，可以取到的最大值
+     * F(x) = (F(x-1) + array[i]) 和  array[i] 之间的较大值
+     * {6,-3,-2,7,-15,1,2,2} 以此为例
+     * F(0) = 6;//初始化
+     * F(1) = 6-3 或者 -3 ，结果是3
+     * F(2) = 3-2 或者是 -2 ,结果是1
+     * …………
+     * @param array
+     * @return
+     */
+    public int FindGreatestSumOfSubArray(int[] array) {
+        int[][] max = new int[array.length][2];
+        int largest = array[0];
+        for (int i=0;i<array.length;i++){
+            max[i][0] = array[i];
+            if (i == 0){
+                max[i][1] = max[i][0];
+            }else {
+                max[i][1] = (max[i-1][1]+max[i][0])> max[i][0] ? (max[i-1][1]+max[i][0]):max[i][0];
+            }
+            if (max[i][1]>largest){
+                largest = max[i][1];
+            }
+        }
+        return largest;
+    }
+
+    /**
+     * 题27
+     * 求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？
+     * 为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。
+     * ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。
+     * @param n
+     * @return
+     */
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int sum = 0;
+        for (int i=1;i<=n;i++){
+            char[] numToString = Integer.toString(i).toCharArray();
+            for (char c :numToString){
+                if (c == '1'){
+                    sum ++;
+                }
+            }
+        }
+        return sum;
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -964,8 +1021,8 @@ public class Solution {
         /*int[] push = {1,2,3,4,5};
         int[] pop = {3,1,2,5,4};
         System.out.println(solution.IsPopOrder(push,pop));*/
-        int[] arr = {1,3,4,5,2,2,2,2,2};
+        int[] arr = {6,-3,-2,7,-15,1,2,2};
         char[] chars = {'a','a','b','c'};
-        System.out.println(solution.MoreThanHalfNum_Solution(arr));
+        System.out.println(solution.NumberOf1Between1AndN_Solution(13));
     }
 }
