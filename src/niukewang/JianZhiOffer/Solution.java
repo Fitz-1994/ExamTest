@@ -963,6 +963,272 @@ public class Solution {
         return sum;
     }
 
+    /**
+     * 题28
+     * 输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+     * @param numbers
+     * @return
+     */
+    public String PrintMinNumber(int [] numbers) {
+        List<String> numString = new ArrayList<>();
+        for (int i=0;i<numbers.length;i++){
+            numString.add(Integer.toString(numbers[i]));
+        }
+        stringBubble(numString);
+        String result = "";
+        for (String s : numString){
+            result += s;
+        }
+        return result;
+    }
+
+    /**
+     * 该方法是用于String数组的排序，排序规则按该题需求定制
+     * @param arr
+     */
+    public static void stringBubble(List<String> arr){
+        //这里i表示的是已经确定位置的个数，j表示本次要比较的数的位置，比较j和j+1位置上的数
+        for (int i=0;i<arr.size();i++){
+            for (int j=0;j<arr.size()-1-i;j++){
+                //判断这两个是否是反序
+                String a = arr.get(j)+arr.get(j+1);
+                String b = arr.get(j+1)+arr.get(j);
+                if (a.compareTo(b) > 0){
+                    exchange(arr,j,j+1);
+                }
+            }
+        }
+    }
+
+    public static List<String> exchange(List<String> arr,int index1 ,int index2){
+        String temp = arr.get(index1);
+        arr.set(index1,arr.get(index2));
+        arr.set(index2,temp);
+        return arr;
+    }
+
+    /**
+     * 题29
+     * 把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
+     * @param index
+     * @return
+     */
+    public int GetUglyNumber_Solution(int index) {
+        if (index == 0){
+            return 0;
+        }
+        if (index == 1){
+            return 1;
+        }
+        int[] uglyNbrs = new int[index];
+        int[] compareNbr = new int[3];
+        int[] compareIndex = new int[3];
+        uglyNbrs[0] = 1;
+        compareNbr[0] = 2;
+        compareNbr[1] = 3;
+        compareNbr[2] = 5;
+        int i = 1;
+        while (i < index){
+            int minIndex = minNum(compareNbr[0],compareNbr[1],compareNbr[2]);
+            if (!contain(uglyNbrs,compareNbr[minIndex])){
+                uglyNbrs[i] = compareNbr[minIndex];
+                i++;
+            }
+            compareIndex[minIndex]++;
+            int factor;
+            if (minIndex == 0){
+                factor = 2;
+            }else if (minIndex == 1){
+                factor = 3;
+            }else {
+                factor = 5;
+            }
+            compareNbr[minIndex] = factor * uglyNbrs[compareIndex[minIndex]];
+
+        }
+        return uglyNbrs[index-1];
+    }
+
+    public int minNum(int a, int b, int c){
+        if (a > b){
+            if (b > c){
+                return 2;
+            }else {
+                return 1;
+            }
+        }else {
+            if (a > c){
+                return 2;
+            }else {
+                return 0;
+            }
+        }
+    }
+
+    public boolean contain(int[] arr, int a) {
+        for (int i=arr.length-1;i>-1;i--){
+            if (arr[i] == a){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 题30
+     * 在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写）.
+     *
+     * @param str
+     * @return
+     */
+    public int FirstNotRepeatingChar(String str) {
+        char[] strChars = str.toCharArray();
+        //LinkedHashMap可以保存插入顺序
+        Map<Character,Integer> strMap = new LinkedHashMap<>();
+        for (char c : strChars){
+            Integer cNum = strMap.get(c);
+            if(cNum == null){
+                strMap.put(c,1);
+            }else {
+                strMap.put(c,++cNum);
+            }
+        }
+        char firstOnceChar = '0';
+        for (char c : strMap.keySet()){
+            if (strMap.get(c) == 1){
+                firstOnceChar = c;
+                break;
+            }
+        }
+        if (firstOnceChar == '0'){
+            return -1;
+        }else {
+            String result = Character.toString(firstOnceChar);
+            return str.indexOf(result);
+        }
+    }
+
+    /**
+     * 题31
+     * 在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。并将P对1000000007取模的结果输出。 即输出P%1000000007
+     * 该题已完成，采用归并排序的思想来解题，时间复杂度是nlogn。直接遍历的时间复杂度是n2，不能通过全部用例。
+     * @param array
+     * @return
+     */
+    public int InversePairs(int [] array) {
+        //这种做法时间复杂度太高
+        /*int sum = 0;
+        for (int i=0;i<array.length-1;i++){
+            for (int j=i+1;j<array.length;j++){
+                if (array[i] > array[j]){
+                    sum++;
+                }
+            }
+        }
+        return sum % 1000000007;*/
+        //这种做法还是超时了
+        /*int sum = 0;
+        int largest = 0;
+        while (array.length>1){
+            largest = largest(array);
+            sum = sum + array.length - 1 -largest;
+            array = arrayDelete(array,largest);
+        }
+        return sum % 1000000007;*/
+        //归并排序法
+        return mergeOrder(array).result % 1000000007;
+    }
+
+    public class MergeReturn {
+        int[] orderedArr;
+        int result;
+
+        MergeReturn(int[] orderedArr, int result){
+            this.orderedArr = orderedArr;
+            this.result = result;
+        }
+    }
+    /**
+     * 归并排序递归
+     * @param arr
+     * @return
+     */
+    public MergeReturn mergeOrder(int[] arr){
+        if (arr.length == 2){
+            MergeReturn mergeReturn;
+            if (arr[0] < arr[1]){
+                mergeReturn = new MergeReturn(arr,0);
+            }else {
+                int[] newArr = new int[2];
+                newArr[0] = arr[1];
+                newArr[1] = arr[0];
+                mergeReturn = new MergeReturn(newArr,1);
+            }
+            return mergeReturn;
+        }
+        if (arr.length == 1){
+            return new MergeReturn(arr,0);
+        }
+        int[] headArr = new int[arr.length/2];
+        int[] tileArr = new int[arr.length-arr.length/2];
+        for (int i=0;i<headArr.length;i++){
+            headArr[i] = arr[i];
+        }
+        for (int i=0;i<tileArr.length;i++){
+            tileArr[i] = arr[arr.length/2 +i];
+        }
+        MergeReturn headReturn = mergeOrder(headArr);
+        MergeReturn tileReturn = mergeOrder(tileArr);
+        int sum = headReturn.result + tileReturn.result;
+        //下面是归并的方法
+        MergeReturn merge = merge(headReturn.orderedArr,tileReturn.orderedArr);
+        sum = sum + merge.result;
+        if (sum > 1000000007){
+            sum = sum % 1000000007;
+        }
+        MergeReturn result = new MergeReturn(merge.orderedArr,sum);
+        return result;
+    }
+
+    /**
+     * 归并两个数组的算法，并计算逆序的个数
+     * @param headArr
+     * @param tileArr
+     * @return
+     */
+    public MergeReturn merge(int[] headArr, int[] tileArr){
+        //增序排列
+        int headIndex = 0;
+        int tileIndex = 0;
+        int result = 0;
+        int[] mergeArr = new int[headArr.length+tileArr.length];
+        int mergeIndex = 0;
+        while (mergeIndex < mergeArr.length){
+            if (headIndex >= headArr.length){
+                mergeArr[mergeIndex] = tileArr[tileIndex];
+                tileIndex++;
+            }else if (tileIndex >= tileArr.length){
+                mergeArr[mergeIndex] = headArr[headIndex];
+                headIndex++;
+            } else {
+                if (headArr[headIndex] > tileArr[tileIndex]) {
+                    mergeArr[mergeIndex] = tileArr[tileIndex];
+                    tileIndex++;
+                    result += (headArr.length - headIndex);
+                } else {
+                    mergeArr[mergeIndex] = headArr[headIndex];
+                    headIndex++;
+                }
+            }
+            if (result > 1000000007){
+                result = result % 1000000007;
+            }
+            mergeIndex++;
+        }
+        MergeReturn mergeReturn = new MergeReturn(mergeArr,result);
+        return mergeReturn;
+    }
+
 
     public static void main(String[] args) {
         //题目2的测试代码
@@ -1021,8 +1287,9 @@ public class Solution {
         /*int[] push = {1,2,3,4,5};
         int[] pop = {3,1,2,5,4};
         System.out.println(solution.IsPopOrder(push,pop));*/
-        int[] arr = {6,-3,-2,7,-15,1,2,2};
+        int[] arr = {364,637,341,406,747,995,234,971,571,219,993,407,416,366,315,301,601,650,418,355,460,505,360,965,516,648,727,667,465,849,455,181,486,149,588,233,144,174,557,67,746,550,474,162,268,142,463,221,882,576,604,739,288,569,256,936,275,401,497,82,935,983,583,523,697,478,147,795,380,973,958,115,773,870,259,655,446,863,735,784,3,671,433,630,425,930,64,266,235,187,284,665,874,80,45,848,38,811,267,575};
         char[] chars = {'a','a','b','c'};
-        System.out.println(solution.NumberOf1Between1AndN_Solution(13));
+        System.out.println(new Solution().InversePairs(arr));
+        System.out.println(arr);
     }
 }
