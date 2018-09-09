@@ -1229,6 +1229,166 @@ public class Solution {
         return mergeReturn;
     }
 
+    /**
+     * 题32
+     * 输入两个链表，找出它们的第一个公共结点。
+     * 已完成
+     * @param pHead1
+     * @param pHead2
+     * @return
+     */
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+        ListNode line1 = pHead1;
+        ListNode line2 = pHead2;
+
+        while(line1 != null ){
+            while (line2 != null){
+                if (line1 == line2){
+                    return line1;
+                }else {
+                    line2 = line2.next;
+                }
+            }
+            line2 = pHead2;
+            line1 = line1.next;
+        }
+        return null;
+    }
+
+    /**
+     * 题33
+     * 统计一个数字在排序数组中出现的次数。
+     * @param array
+     * @param k
+     * @return
+     */
+    public int GetNumberOfK(int [] array , int k) {
+        boolean equals = false;
+        int sum = 0;
+        for (int a : array){
+            if (equals){
+                if (a == k){
+                    sum++;
+                }else {
+                    break;
+                }
+            }else {
+                if (a == k){
+                    sum++;
+                    equals = true;
+                }
+            }
+        }
+        return sum;
+    }
+
+    /**
+     * 题34
+     * 输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+     * @param root
+     * @return
+     */
+    public int TreeDepth(TreeNode root) {
+        if (root == null){
+            return 0;
+        }
+        if (root.left == null && root.right == null){
+            return 1;
+        }else if (root.left == null){
+            int right = TreeDepth(root.right);
+            return right+1;
+        }else if (root.right == null){
+            int left = TreeDepth(root.left);
+            return left+1;
+        }else {
+            int left = TreeDepth(root.left);
+            int right = TreeDepth(root.right);
+            int max = left > right ? left : right;
+            return max + 1;
+        }
+    }
+
+
+    /**
+     * 题35
+     * 输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+     * @param root
+     * @return
+     */
+    public boolean IsBalanced_Solution(TreeNode root) {
+        //root是空
+        if (root == null){
+            return true;
+            //root没有孩子节点的情况
+        }
+        if (root.left == null && root.right == null){
+            return true;
+            //root有一个孩子节点的情况
+        }else if (root.left == null && root.right != null){
+            if (root.right.left == null && root.right.right == null){
+                return true;
+            }else {
+                return false;
+            }
+        }else if (root.left != null && root.right == null){
+            if (root.left.left == null && root.left.right == null){
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            //root有两个孩子节点的情况
+            boolean left = IsBalanced_Solution(root.left);
+            boolean right = IsBalanced_Solution(root.right);
+            if (left && right){
+                int leftDepth = TreeDepth(root.left);
+                int rightDepth = TreeDepth(root.right);
+                int gap = leftDepth - rightDepth;
+                if (gap >= -1 && gap <=1){
+                    return true;
+                }else {
+                    return false;
+                }
+            }else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * 题36
+     * 一个整型数组里除了两个数字之外，其他的数字都出现了偶数次。请写程序找出这两个只出现一次的数字。
+     * //num1,num2分别为长度为1的数组。传出参数
+     * //将num1[0],num2[0]设置为返回结果
+     * @param array
+     * @param num1
+     * @param num2
+     */
+    public void FindNumsAppearOnce(int [] array,int num1[] , int num2[]) {
+        HashMap<Integer,Integer> arrayNum = new HashMap<>();
+        Integer num = null;
+        for (int a : array){
+            num = arrayNum.get(a);
+            if (num == null){
+                arrayNum.put(a,1);
+            }else {
+                arrayNum.put(a,arrayNum.get(a)+1);
+            }
+        }
+        int num1Full = 0;
+        for (Map.Entry<Integer,Integer> entry : arrayNum.entrySet()){
+            if (entry.getValue() == 1){
+                if (num1Full == 0){
+                    num1[0] = entry.getKey();
+                }else if (num1Full == 1){
+                    num2[0] = entry.getKey();
+                }else {
+                    break;
+                }
+                num1Full++;
+            }
+        }
+    }
 
     public static void main(String[] args) {
         //题目2的测试代码
