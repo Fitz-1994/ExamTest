@@ -1390,6 +1390,78 @@ public class Solution {
         }
     }
 
+    /**
+     * 题37
+     * 题目描述
+     * 小明很喜欢数学,有一天他在做数学作业时,要求计算出9~16的和,他马上就写出了正确答案是100。但是他并不满足于此,他在想究竟有多少种连续的正数序列的和为100(至少包括两个数)。没多久,他就得到另一组连续正数和为100的序列:18,19,20,21,22。现在把问题交给你,你能不能也很快的找出所有和为S的连续正数序列? Good Luck!
+     * 输出描述:
+     * 输出所有和为S的连续正数序列。序列内按照从小至大的顺序，序列间按照开始数字从小到大的顺序
+     * @param sum
+     * @return
+     */
+    public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+        int begin = 1;
+        int end = 2;
+        int currentSum = 3;
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        while (begin < (sum+1)/2){
+            if (currentSum < sum){
+                end++;
+                currentSum += end;
+            }else if (currentSum > sum){
+                currentSum = currentSum - begin;
+                begin++;
+            }else {
+                ArrayList<Integer> answer = new ArrayList<>();
+                for (int i=begin;i<=end;i++){
+                    answer.add(i);
+                }
+                result.add(answer);
+                currentSum = currentSum - begin;
+                begin++;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 题38
+     * 题目描述
+     * 输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的。
+     * 输出描述:
+     * 对应每个测试案例，输出两个数，小的先输出。
+     * @param array
+     * @param sum
+     * @return
+     */
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        ArrayList<ArrayList<Integer>> welldone = new ArrayList<>();
+        for (int i=0;i<array.length;i++){
+            for (int j=i+1;j<array.length;j++){
+                if (array[i]+array[j] == sum){
+                    ArrayList<Integer> arrayList = new ArrayList<>();
+                    arrayList.add(array[i]);
+                    arrayList.add(array[j]);
+                    welldone.add(arrayList);
+                }
+                if (array[i]+array[j] >= sum){
+                    break;
+                }
+            }
+        }
+        if (welldone.size()>0) {
+            ArrayList<Integer> min = welldone.get(0);
+            for (ArrayList<Integer> list : welldone) {
+                if (list.get(0) * list.get(1) < min.get(0) * min.get(1)) {
+                    min = list;
+                }
+            }
+            return min;
+        }else {
+            return new ArrayList<>();
+        }
+    }
+
     public static void main(String[] args) {
         //题目2的测试代码
         /*StringBuffer str = new StringBuffer("helloworld ");
@@ -1447,9 +1519,10 @@ public class Solution {
         /*int[] push = {1,2,3,4,5};
         int[] pop = {3,1,2,5,4};
         System.out.println(solution.IsPopOrder(push,pop));*/
-        int[] arr = {364,637,341,406,747,995,234,971,571,219,993,407,416,366,315,301,601,650,418,355,460,505,360,965,516,648,727,667,465,849,455,181,486,149,588,233,144,174,557,67,746,550,474,162,268,142,463,221,882,576,604,739,288,569,256,936,275,401,497,82,935,983,583,523,697,478,147,795,380,973,958,115,773,870,259,655,446,863,735,784,3,671,433,630,425,930,64,266,235,187,284,665,874,80,45,848,38,811,267,575};
+        int[] arr = {1,2,4,7,11,16};
         char[] chars = {'a','a','b','c'};
-        System.out.println(new Solution().InversePairs(arr));
+        ArrayList a = new Solution().FindNumbersWithSum(arr,10);
+        System.out.println(a);
         System.out.println(arr);
     }
 }
