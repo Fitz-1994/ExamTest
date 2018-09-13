@@ -1462,6 +1462,50 @@ public class Solution {
         }
     }
 
+    /**
+     * 题39
+     * 汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！
+     * @param str
+     * @param n
+     * @return
+     */
+    public String LeftRotateString(String str,int n) {
+        if (n == 0){
+            return str;
+        }
+        if (str == null || "".equals(str)){
+            return "";
+        }
+        n = n % str.length();
+        String front = str.substring(0,n);
+        String end = str.substring(n);
+        return end+front;
+    }
+
+    /**
+     * 题40
+     * 牛客最近来了一个新员工Fish，每天早晨总是会拿着一本英文杂志，写些句子在本子上。同事Cat对Fish写的内容颇感兴趣，有一天他向Fish借来翻看，但却读不懂它的意思。例如，“student. a am I”。后来才意识到，这家伙原来把句子单词的顺序翻转了，正确的句子应该是“I am a student.”。Cat对一一的翻转这些单词顺序可不在行，你能帮助他么？
+     * @param str
+     * @return
+     */
+    public String ReverseSentence(String str) {
+        if (str == null || "".equals(str)){
+            return "";
+        }
+        String[] strings = str.split(" ");
+        if (strings.length == 1 || strings.length == 0){
+            return str;
+        }
+        String result = "";
+        for (int i=strings.length-1;i>-1;i--) {
+            result = result + strings[i] ;
+            if (i != 0){
+                result += " ";
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         //题目2的测试代码
         /*StringBuffer str = new StringBuffer("helloworld ");
@@ -1521,8 +1565,12 @@ public class Solution {
         System.out.println(solution.IsPopOrder(push,pop));*/
         int[] arr = {1,2,4,7,11,16};
         char[] chars = {'a','a','b','c'};
-        ArrayList a = new Solution().FindNumbersWithSum(arr,10);
-        System.out.println(a);
-        System.out.println(arr);
+        /*ArrayList a = new Solution().FindNumbersWithSum(arr,10);*/
+        String a = "abcXYZdef";
+        String aFront = a.substring(0,1);
+        String aEnd = a.substring(1,3);
+        System.out.println(new Solution().ReverseSentence("student. a am I"));/*
+        System.out.println(aFront);
+        System.out.println(aEnd);*/
     }
 }
