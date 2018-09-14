@@ -1506,6 +1506,160 @@ public class Solution {
         return result;
     }
 
+    /**
+     * 题41
+     * LL今天心情特别好,因为他去买了一副扑克牌,发现里面居然有2个大王,2个小王(一副牌原本是54张^_^)...他随机从中抽出了5张牌,想测测自己的手气,看看能不能抽到顺子,如果抽到的话,他决定去买体育彩票,嘿嘿！！“红心A,黑桃3,小王,大王,方片5”,“Oh My God!”不是顺子.....LL不高兴了,他想了想,决定大\小 王可以看成任何数字,并且A看作1,J为11,Q为12,K为13。上面的5张牌就可以变成“1,2,3,4,5”(大小王分别看作2和4),“So Lucky!”。LL决定去买体育彩票啦。 现在,要求你使用这幅牌模拟上面的过程,然后告诉我们LL的运气如何， 如果牌能组成顺子就输出true，否则就输出false。为了方便起见,你可以认为大小王是0。
+     * @param numbers
+     * @return
+     */
+    public boolean isContinuous(int [] numbers) {
+        //蛇皮输入集。。。竟然还有这种输入，跟题目意思不符
+        if (numbers.length == 0){
+            return false;
+        }
+        //解题思路，两种情况下是不幸运的，1、除0之外有重复；2、除0之外max-min>4。
+        Set<Integer> numSet = new HashSet<>();
+        boolean result = true;
+        //第一类判断
+        for (int i : numbers) {
+            if (i != 0){
+                if (numSet.contains(i)){
+                    result = false;
+                    break;
+                }else {
+                    numSet.add(i);
+                }
+            }
+        }
+        if (!result){
+            return false;
+        }else {
+            int max = -1;
+            int min = 14;
+            for (int i : numbers){
+                if (i != 0){
+                    if (i > max){
+                        max = i;
+                    }
+                    if (i < min){
+                        min = i;
+                    }
+                }
+            }
+            if (max - min < 5){
+                return true;
+            }else {
+                return false;
+            }
+        }
+    }
+
+
+    /**
+     * 题42
+     * 每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友,可以不用表演,并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!^_^)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1)
+     * @param n
+     * @param m
+     * @return
+     */
+    public int LastRemaining_Solution(int n, int m) {
+        if (n == 0){
+            return -1;
+        }
+        List<Integer> childs = new ArrayList<>();
+        for (int i=0;i<n;i++){
+            childs.add(i);
+        }
+        int begin = 0;
+        int move;
+        int deleteChild;
+        while (childs.size()>1){
+            move = (m-1) % childs.size();
+            deleteChild = (begin + move) % childs.size();
+            if (deleteChild == childs.size()){
+                begin = 0;
+            }else {
+                begin = deleteChild;
+            }
+            childs.remove(deleteChild);
+        }
+        return childs.get(0);
+    }
+
+    /**
+     * 题43
+     * 求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+     * @param n
+     * @return
+     */
+    public int Sum_Solution(int n) {
+        if (n == 1){
+            return 1;
+        }
+        return n+Sum_Solution(n-1);
+    }
+
+    /**
+     * 题44
+     * 写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。
+     * @param num1
+     * @param num2
+     * @return
+     * 该题使用到的位运算，异或运算用于得出不进位加法结果，与运算+左移用于得出进位的结果，两者相加得出最后结果
+     * 详见这边博客
+     * https://blog.csdn.net/derrantcm/article/details/46798763
+     */
+    public int Add(int num1,int num2) {
+        int sum = num1 ^ num2;
+        int carry = (num1 & num2) << 1;
+        if (carry !=0){
+            return Add(sum,carry);
+        }else {
+            return sum;
+        }
+    }
+
+    /**
+     * 题45
+     * 将一个字符串转换成一个整数(实现Integer.valueOf(string)的功能，但是string不符合数字要求时返回0)，要求不能使用字符串转换整数的库函数。 数值为0或者字符串不是一个合法的数值则返回0。
+     * 输入描述:
+     * 输入一个字符串,包括数字字母符号,可以为空
+     * 输出描述:
+     * 如果是合法的数值表达则返回该数字，否则返回0
+     * @param str
+     * @return
+     */
+    public int StrToInt(String str) {
+        if (str == null || "".equals(str)){
+            return 0;
+        }
+        char[] strChars = str.toCharArray();
+        if (strChars.length == 1){
+            if (strChars[0] == '+' || strChars[0] == '-'){
+                return 0;
+            }
+        }
+        boolean isNumber = true;
+        for (int i=0;i<strChars.length;i++){
+            if (strChars[i] < '0' || strChars[i] > '9'){
+                if (i == 0){
+                    if (strChars[0] != '+' && strChars[0] != '-'){
+                        isNumber = false;
+                        break;
+                    }
+                }else {
+                    isNumber = false;
+                    break;
+                }
+            }
+        }
+        if (isNumber){
+            return Integer.valueOf(str);
+        }else {
+            return 0;
+        }
+    }
+
     public static void main(String[] args) {
         //题目2的测试代码
         /*StringBuffer str = new StringBuffer("helloworld ");
@@ -1516,26 +1670,6 @@ public class Solution {
         //ListNode listNode = new ListNode(1);
         //ArrayList<Integer> list = printListFromTailToHead(null);
         Solution solution = new Solution();
-        //System.out.println(solution.Power(2,-3));
-        /*ListNode l1 = new ListNode(1);
-        ListNode l2 = new ListNode(2);
-        ListNode l3 = new ListNode(4);
-        ListNode l4 = new ListNode(5);
-        ListNode l5 = new ListNode(7);
-        l1.next = l2;
-        l2.next = l3;
-        l3.next = l4;
-        l4.next = l5;
-        ListNode r1 = new ListNode(3);
-        ListNode r2 = new ListNode(6);
-        ListNode r3 = new ListNode(7);
-        ListNode r4 = new ListNode(8);
-        ListNode r5 = new ListNode(9);
-        r1.next = r2;
-        r2.next = r3;
-        r3.next = r4;
-        r4.next = r5;
-        solution.Merge(l1,r1);*/
         
         TreeNode l1 = new TreeNode(8);
         TreeNode l2 = new TreeNode(8);
@@ -1569,7 +1703,7 @@ public class Solution {
         String a = "abcXYZdef";
         String aFront = a.substring(0,1);
         String aEnd = a.substring(1,3);
-        System.out.println(new Solution().ReverseSentence("student. a am I"));/*
+        System.out.println(new Solution().StrToInt("+1a00"));/*
         System.out.println(aFront);
         System.out.println(aEnd);*/
     }
