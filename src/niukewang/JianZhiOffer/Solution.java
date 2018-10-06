@@ -1660,6 +1660,140 @@ public class Solution {
         }
     }
 
+    /**
+     * 题50  前面题号可能漏了。。
+     *
+     在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2。
+     * @param numbers
+     * @param length
+     * @param duplication
+     * @return
+     */
+    // Parameters:
+    //    numbers:     an array of integers
+    //    length:      the length of array numbers
+    //    duplication: (Output) the duplicated number in the array number,length of duplication array is 1,so using duplication[0] = ? in implementation;
+    //                  Here duplication like pointor in C/C++, duplication[0] equal *duplication in C/C++
+    //    这里要特别注意~返回任意重复的一个，赋值duplication[0]
+    // Return value:       true if the input is valid, and there are some duplications in the array number
+    //                     otherwise false
+    public boolean duplicate(int numbers[],int length,int [] duplication) {
+        Set<Integer> numberSet = new HashSet<>();
+        for (int i = 0; i < length; i++) {
+            if (numberSet.contains(numbers[i])){
+                duplication[0] = numbers[i];
+                return true;
+            }else {
+                numberSet.add(numbers[i]);
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 题51
+     * 给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]。不能使用除法。
+     * @param A
+     * @return
+     */
+    public int[] multiply(int[] A) {
+        int[] B = new int[A.length];
+        int front = 1;
+        int end = 1;
+        for (int i = 0; i < A.length; i++) {
+            if (i != 0){
+                front *= A[i-1];
+            }
+            for (int j = i+1; j < A.length; j++) {
+                end *= A[j];
+            }
+            B[i] = front * end;
+            end = 1;
+        }
+        return B;
+    }
+
+    /**
+     * 题52
+     * 请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+     * @param str
+     * @param pattern
+     * @return
+     */
+    public boolean match(char[] str, char[] pattern) {
+        //si和pi分别表示str数组的下标和pattern数组的下标
+        int si = 0;
+        int pi = 0;
+        boolean result = true;
+        while (result){
+            if (pi < pattern.length){
+                if (si < str.length){
+                    //si没走完，pi也没走完，这种情况最复杂
+                    if (pi+1 < pattern.length){
+                        if (pattern[pi+1] == '*'){
+                            if (str[si] == pattern[pi]){
+                                int last = si;
+                                for (; last < str.length; last++) {
+                                    if (str[last] != pattern[pi]){
+                                        break;
+                                    }
+                                }
+
+                                    si = last;
+                                    pi += 2;
+
+                            }else {
+                                pi += 2;
+                            }
+                        }else {
+                            if (pattern[pi] == '.'){
+                                pi++;
+                                si++;
+                            }else {
+                                if (pattern[pi] == str[si]){
+                                    pi++;
+                                    si++;
+                                }else {
+                                    result = false;
+                                }
+                            }
+                        }
+                    }else {
+                        if (pattern[pi] == '.'){
+                            pi++;
+                            si++;
+                        }else {
+                            if (pattern[pi] == str[si]){
+                                pi++;
+                                si++;
+                            }else {
+                                result = false;
+                            }
+                        }
+                    }
+                }else {
+                    //si走完了
+                    if (pi+1 < pattern.length){
+                        if (pattern[pi+1] == '*') {
+                            pi += 2;
+                        }
+                    }else {
+                        result = false;
+                    }
+                }
+            }else {
+                //pi走完了
+                if (si < str.length){
+                    result = false;
+                }else {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         //题目2的测试代码
         /*StringBuffer str = new StringBuffer("helloworld ");
@@ -1698,12 +1832,14 @@ public class Solution {
         int[] pop = {3,1,2,5,4};
         System.out.println(solution.IsPopOrder(push,pop));*/
         int[] arr = {1,2,4,7,11,16};
-        char[] chars = {'a','a','b','c'};
+        char[] chars = {'a','a','a','c'};
         /*ArrayList a = new Solution().FindNumbersWithSum(arr,10);*/
         String a = "abcXYZdef";
         String aFront = a.substring(0,1);
         String aEnd = a.substring(1,3);
-        System.out.println(new Solution().StrToInt("+1a00"));/*
+        String str = "aaab";
+        String pattern = "a*b";
+        System.out.println(new Solution().match(str.toCharArray(),pattern.toCharArray()));/*
         System.out.println(aFront);
         System.out.println(aEnd);*/
     }
