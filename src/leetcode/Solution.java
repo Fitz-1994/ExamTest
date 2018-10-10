@@ -1,5 +1,8 @@
 package leetcode;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Solution {
     /**
      * 1、两数之和
@@ -114,6 +117,95 @@ public class Solution {
         return head;
     }
 
+    /**
+     * 3、无重复字符的最长子串
+     * 给定一个字符串，找出不含有重复字符的最长子串的长度。
+
+     示例 1:
+
+     输入: "abcabcbb"
+     输出: 3
+     解释: 无重复字符的最长子串是 "abc"，其长度为 3。
+     示例 2:
+
+     输入: "bbbbb"
+     输出: 1
+     解释: 无重复字符的最长子串是 "b"，其长度为 1。
+     示例 3:
+
+     输入: "pwwkew"
+     输出: 3
+     解释: 无重复字符的最长子串是 "wke"，其长度为 3。
+     请注意，答案必须是一个子串，"pwke" 是一个子序列 而不是子串。
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        int begin = 0;
+        int end = 0;
+        int max = 0;
+        char[] strArray = s.toCharArray();
+        Set<Character> charSet = new HashSet<>();
+        while (end < strArray.length){
+            if (charSet.contains(strArray[end])){
+                //找出与end相同的字符的位置
+                for (int i = begin; i < end; i++) {
+                    if (strArray[i] == strArray[end]){
+                        begin = i+1;
+                        break;
+                    }else {
+                        charSet.remove(strArray[i]);
+                    }
+                }
+                end++;
+            }else {
+                charSet.add(strArray[end]);
+                end++;
+                if (max < end-begin){
+                    max = end - begin;
+                }
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 4、两个排序数组的中位数
+     * 给定两个大小为 m 和 n 的有序数组 nums1 和 nums2 。
+     *
+     * 请找出这两个有序数组的中位数。要求算法的时间复杂度为 O(log (m+n)) 。
+     *
+     * 你可以假设 nums1 和 nums2 不同时为空。
+     *
+     * 示例 1:
+     *
+     * nums1 = [1, 3]
+     * nums2 = [2]
+     *
+     * 中位数是 2.0
+     * 示例 2:
+     *
+     * nums1 = [1, 2]
+     * nums2 = [3, 4]
+     *
+     * 中位数是 (2 + 3)/2 = 2.5
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+    }
+
+    /**
+     * 针对单独的一个排序数组，寻找中位数
+     * @param nums
+     * @return
+     */
+    public double findMedianSortedArray(int[] nums){
+
+    }
+
     public static void main(String[] args) {
         int[] intParam = {0,4,5,0};
         //int[] result = new Solution().twoSum(intParam,0);
@@ -127,7 +219,7 @@ public class Solution {
         /*l1.next = l11;
         l11.next = l12;
         l21.next = l22;*/
-        ListNode listNode = new Solution().addTwoNumbers(l1,l2);
-        //System.out.println(result);
+        //ListNode listNode = new Solution().addTwoNumbers(l1,l2);
+        System.out.println(new Solution().lengthOfLongestSubstring("abcabcbb"));
     }
 }
