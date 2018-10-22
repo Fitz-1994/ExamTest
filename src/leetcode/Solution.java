@@ -194,7 +194,35 @@ public class Solution {
      * @return
      */
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int index1 = 0;
+        int index2 = 0;
+        int totalNums = nums1.length + nums2.length;
+        if (totalNums%2 == 0){
+            int num1 = 0;
+            int num2 = 0;
+            for (int i=1;i<totalNums/2;i++){
+                if (nums1[index1] <= nums2[index2]){
+                    if (i == totalNums/2){
+                        num1 = nums1[index1];
+                    }
+                    if (i == totalNums/2+1){
+                        num2 = nums2[index2];
+                    }
+                    index1++;
+                }else {
+                    if (i == totalNums/2){
+                        num1 = nums1[index1];
+                    }
+                    if (i == totalNums/2+1){
+                        num2 = nums2[index2];
+                    }
+                    index2++;
+                }
+            }
+        }else {
 
+        }
+        return 0.0;
     }
 
     /**
@@ -203,7 +231,7 @@ public class Solution {
      * @return
      */
     public double findMedianSortedArray(int[] nums){
-
+return 0.0;
     }
 
     public static void main(String[] args) {
