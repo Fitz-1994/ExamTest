@@ -196,46 +196,55 @@ public class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int index1 = 0;
         int index2 = 0;
-        int totalNums = nums1.length + nums2.length;
-        if (totalNums%2 == 0){
-            int num1 = 0;
-            int num2 = 0;
-            for (int i=1;i<totalNums/2;i++){
+        int totalLength = nums1.length+nums2.length;
+        //是否是偶数，如果是isEven = true，如果不是isEven = false
+        boolean isEven = (totalLength%2 == 0);
+        int num1 = 0;
+        int num2 = 0;
+        int[] integerArray = new int[totalLength];
+        for (int i = 0; i < totalLength; i++) {
+            if (index1 == nums1.length){
+                //数组1已经比较完毕
+                integerArray[i] = nums2[index2];
+                index2++;
+            }else if (index2 == nums2.length){
+                //数组2已经比较完毕
+                integerArray[i] = nums1[index1];
+                index1++;
+            }else {
+                //两个数组都没有比较完毕
                 if (nums1[index1] <= nums2[index2]){
-                    if (i == totalNums/2){
-                        num1 = nums1[index1];
-                    }
-                    if (i == totalNums/2+1){
-                        num2 = nums2[index2];
-                    }
+                    integerArray[i] = nums1[index1];
                     index1++;
                 }else {
-                    if (i == totalNums/2){
-                        num1 = nums1[index1];
-                    }
-                    if (i == totalNums/2+1){
-                        num2 = nums2[index2];
-                    }
+                    integerArray[i] = nums2[index2];
                     index2++;
                 }
             }
-        }else {
-
+            if (isEven){
+                if (i == totalLength/2-1){
+                    num1 = integerArray[i];
+                }else if (i == totalLength/2){
+                    num2 = integerArray[i];
+                    break;
+                }
+            }else {
+                if (i == totalLength/2) {
+                    num1 = integerArray[i];
+                    break;
+                }
+            }
         }
-        return 0.0;
-    }
-
-    /**
-     * 针对单独的一个排序数组，寻找中位数
-     * @param nums
-     * @return
-     */
-    public double findMedianSortedArray(int[] nums){
-return 0.0;
+        if (isEven){
+            return ((double)(num1+num2))/2;
+        }else {
+            return (double)num1;
+        }
     }
 
     public static void main(String[] args) {
-        int[] intParam = {0,4,5,0};
+        int[] intParam = {1,2};
+        int[] intParam2 = {3,4};
         //int[] result = new Solution().twoSum(intParam,0);
         ListNode l1 = new ListNode(1);
         /*ListNode l11 = new ListNode(8);*/
@@ -248,6 +257,6 @@ return 0.0;
         l11.next = l12;
         l21.next = l22;*/
         //ListNode listNode = new Solution().addTwoNumbers(l1,l2);
-        System.out.println(new Solution().lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(new Solution().findMedianSortedArrays(intParam,intParam2));
     }
 }
