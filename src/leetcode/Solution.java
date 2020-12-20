@@ -1,6 +1,8 @@
 package leetcode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Solution {
@@ -21,19 +23,14 @@ public class Solution {
      * @return
      */
     public int[] twoSum(int[] nums, int target) {
-        int[] result = new int[2];
-        outter:
         for (int i = 0; i < nums.length; i++) {
-            inner:
-            for (int j = i+1; j < nums.length; j++) {
-                if (nums[i] + nums[j] == target){
-                    result[0] = i;
-                    result[1] = j;
-                    break outter;
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == target) {
+                    return new int[]{i, j};
                 }
             }
         }
-        return result;
+        return new int[2];
     }
 
     /**
@@ -235,16 +232,140 @@ public class Solution {
                 }
             }
         }
-        if (isEven){
-            return ((double)(num1+num2))/2;
-        }else {
-            return (double)num1;
+        if (isEven) {
+            return ((double) (num1 + num2)) / 2;
+        } else {
+            return (double) num1;
         }
     }
 
+    /**
+     * 5.
+     * 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入: "babad"
+     * 输出: "bab"
+     * 注意: "aba" 也是一个有效答案。
+     * 示例 2：
+     * <p>
+     * 输入: "cbbd"
+     * 输出: "bb"
+     *
+     * @param s
+     * @return
+     */
+    public String longestPalindrome(String s) {
+        //先做空判断
+        if (s == null) {
+            return null;
+        }
+        if ("".equals(s)) {
+            return s;
+        }
+        /*
+         * 第一种方法，逆转字符串
+         * */
+        //转换成字符数组
+        char[] sToChars = s.toCharArray();
+        char[] reversChars = new char[sToChars.length];
+        for (int i = sToChars.length; i > 0; i--) {
+            reversChars[i - 1] = sToChars[sToChars.length - i];
+        }
+        //利用两个字符数组找出最长公共子串
+        int i1 = 0;
+        int length = 1;
+        int j1 = 0;
+        while (i1 < sToChars.length) {
+            if (sToChars[i1] == reversChars[j1]) {
+                while (i1 + length < sToChars.length && j1 + length < sToChars.length) {
+                    if (sToChars[i1 + length] == reversChars[j1 + length]) {
+                        length++;
+                    } else {
+
+                    }
+                }
+            } else if (j1 < sToChars.length) {
+                j1++;
+            } else {
+                i1++;
+            }
+        }
+
+        return "";
+    }
+
+    public boolean isRevers(char[] chars) {
+        for (int i = 0; i < chars.length / 2; i++) {
+            if (chars[i] != chars[chars.length - i - 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 7.
+     * 给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: 123
+     * 输出: 321
+     * 示例 2:
+     * <p>
+     * 输入: -123
+     * 输出: -321
+     * 示例 3:
+     * <p>
+     * 输入: 120
+     * 输出: 21
+     *
+     * @param x
+     * @return
+     */
+    public int reverse(long x) {
+        if (x < -Math.pow(2, 31) || x > (Math.pow(2, 31) - 1)) {
+            return 0;
+        }
+        //获得正负号，和绝对值
+        int factor = 1;
+        if (x < 0) {
+            factor = -1;
+        } else if (x == 0) {
+            return 0;
+        }
+        long absX = x * factor;
+
+        char[] xChars = Integer.toString((int) absX).toCharArray();
+        List<Character> reCharList = new ArrayList<>();
+
+        int j = 0;
+        boolean head = true;
+        for (int i = xChars.length - 1; i >= 0; i--) {
+            if (head) {
+                if (xChars[i] != '0') {
+                    reCharList.add(xChars[i]);
+                    head = false;
+                    j++;
+                }
+            } else {
+                reCharList.add(xChars[i]);
+                j++;
+            }
+        }
+        char[] reChars = new char[reCharList.size()];
+        for (int i = 0; i < reChars.length; i++) {
+            reChars[i] = reCharList.get(i);
+        }
+        int reAbsX = Integer.valueOf(new String(reChars));
+        return reAbsX * factor;
+    }
+
     public static void main(String[] args) {
-        int[] intParam = {1,2};
-        int[] intParam2 = {3,4};
+        int[] intParam = {1, 2};
+        int[] intParam2 = {3, 4};
         //int[] result = new Solution().twoSum(intParam,0);
         ListNode l1 = new ListNode(1);
         /*ListNode l11 = new ListNode(8);*/
@@ -257,6 +378,6 @@ public class Solution {
         l11.next = l12;
         l21.next = l22;*/
         //ListNode listNode = new Solution().addTwoNumbers(l1,l2);
-        System.out.println(new Solution().findMedianSortedArrays(intParam,intParam2));
+        System.out.println(new Solution().reverse(9646324351L));
     }
 }

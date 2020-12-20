@@ -1,0 +1,9 @@
+userA  Login
+userB  Login
+userC  Login
+userA  logout
+userB  logout
+userA  Login
+userA  logout
+userB  Login
+userA  Login
