@@ -220,52 +220,50 @@ public class Solution {
      * @return
      */
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int index1 = 0;
-        int index2 = 0;
-        int totalLength = nums1.length+nums2.length;
-        //是否是偶数，如果是isEven = true，如果不是isEven = false
-        boolean isEven = (totalLength%2 == 0);
+        int totalLength = nums1.length + nums2.length;
+        boolean isEven = (totalLength % 2 == 0);
+        int mid1 = (totalLength / 2) - 1;
+        int mid2 = mid1 + 1;
+
         int num1 = 0;
         int num2 = 0;
-        int[] integerArray = new int[totalLength];
-        for (int i = 0; i < totalLength; i++) {
-            if (index1 == nums1.length){
+
+        int index1 = 0;
+        int index2 = 0;
+
+        int currentNum;
+
+        for (int i = 0; i <= mid2; i++) {
+            if (index1 == nums1.length) {
                 //数组1已经比较完毕
-                integerArray[i] = nums2[index2];
+                currentNum = nums2[index2];
                 index2++;
-            }else if (index2 == nums2.length){
+            } else if (index2 == nums2.length) {
                 //数组2已经比较完毕
-                integerArray[i] = nums1[index1];
+                currentNum = nums1[index1];
                 index1++;
-            }else {
+            } else {
                 //两个数组都没有比较完毕
-                if (nums1[index1] <= nums2[index2]){
-                    integerArray[i] = nums1[index1];
+                if (nums1[index1] <= nums2[index2]) {
+                    currentNum = nums1[index1];
                     index1++;
-                }else {
-                    integerArray[i] = nums2[index2];
+                } else {
+                    currentNum = nums2[index2];
                     index2++;
                 }
             }
-            if (isEven){
-                if (i == totalLength/2-1){
-                    num1 = integerArray[i];
-                }else if (i == totalLength/2){
-                    num2 = integerArray[i];
-                    break;
-                }
-            }else {
-                if (i == totalLength/2) {
-                    num1 = integerArray[i];
-                    break;
-                }
+            if (isEven && i == mid1) {
+                num1 = currentNum;
+            } else if (i == mid2) {
+                num2 = currentNum;
             }
         }
         if (isEven) {
-            return ((double) (num1 + num2)) / 2;
+            return (num1 + num2) / 2.0;
         } else {
-            return (double) num1;
+            return num2;
         }
+
     }
 
     /**
@@ -393,8 +391,8 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        int[] intParam = {1, 2};
-        int[] intParam2 = {3, 4};
+        int[] intParam = {1, 3};
+        int[] intParam2 = {2};
         //int[] result = new Solution().twoSum(intParam,0);
         ListNode l1 = new ListNode(1);
         ListNode l11 = new ListNode(8);
@@ -406,8 +404,8 @@ public class Solution {
         l1.next = l11;
         l11.next = l12;
         l21.next = l22;
-        ListNode listNode = new Solution().addTwoNumbers(l1, l2);
-        System.out.println(listNode);
+        //ListNode listNode = new Solution().addTwoNumbers(l1, l2);
+        System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
         //System.out.println(new Solution().reverse(9646324351L));
     }
 }
