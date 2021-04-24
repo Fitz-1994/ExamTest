@@ -49,67 +49,96 @@ public class Solution {
      * @return
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode head = null;
-        ListNode index = null;
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        ListNode head;
+        int sum;
         boolean addOne = false;
-        while (l1 != null || l2 != null){
-            int indexNum = 0;
-            if (l1 == null){
-                //l1为空，l2不为空
-                if (addOne){
-                    indexNum = l2.val + 1;
-                    addOne = false;
-                    if (indexNum > 9){
-                        indexNum = indexNum % 10;
-                        addOne = true;
-                    }
-                }else {
-                    indexNum = l2.val;
-                }
-            }else {
-                if (l2 == null){
-                    //l2为空，l1不为空
-                    if (addOne){
-                        indexNum = l1.val + 1;
-                        addOne = false;
-                        if (indexNum > 9){
-                            indexNum = indexNum % 10;
-                            addOne = true;
-                        }
-                    }else {
-                        indexNum = l1.val;
-                    }
-                }else {
-                    //l1、l2都不为空
-                    indexNum = l1.val + l2.val;
-                    if (addOne){
-                        indexNum++;
-                        addOne = false;
-                    }
-                    if (indexNum > 9){
-                        indexNum = indexNum % 10;
-                        addOne = true;
-                    }
-                }
-            }
-            ListNode temp = new ListNode(indexNum);
-            if (head == null){
-                head = temp;
-                index = temp;
-            }else {
-                index.next = temp;
-                index = temp;
-            }
-            if (l1 != null) {
-                l1 = l1.next;
-            }
-            if (l2 != null) {
-                l2 = l2.next;
+        if (l1.val == 0) {
+            head = l2;
+        } else if (l2.val == 0) {
+            head = l1;
+        } else {
+            sum = l1.val + l2.val;
+            if (sum < 10) {
+                head = new ListNode(sum);
+            } else {
+                head = new ListNode(sum % 10);
+                addOne = true;
             }
         }
-        if (addOne){
-            ListNode temp = new ListNode(1);
-            index.next = temp;
+        ListNode index = head;
+        l1 = l1.next;
+        l2 = l2.next;
+
+        while (true) {
+            //没有+1
+            if (!addOne) {
+                //判断是否有一个数已经算完
+                if (l1 == null) {
+                    index.next = l2;
+                    break;
+                }
+                if (l2 == null) {
+                    index.next = l1;
+                    break;
+                }
+                if (l1.val == 0) {
+                    index.next = l2;
+                } else if (l2.val == 0) {
+                    index.next = l1;
+                } else {
+                    sum = l1.val + l2.val;
+                    if (sum < 10) {
+                        index.next = new ListNode(sum);
+                    } else {
+                        index.next = new ListNode(sum % 10);
+                        addOne = true;
+                    }
+                }
+                l1 = l1.next;
+                l2 = l2.next;
+            } else {
+                //判断是否有一个数已经算完
+                if (l1 == null && l2 == null) {
+                    index.next = new ListNode(1);
+                    break;
+                } else if (l1 == null) {
+                    sum = l2.val + 1;
+                    if (sum < 10) {
+                        index.next = new ListNode(sum, l2.next);
+                        break;
+                    } else {
+                        index.next = new ListNode(0);
+                        l2 = l2.next;
+                    }
+                } else if (l2 == null) {
+                    sum = l1.val + 1;
+                    if (sum < 10) {
+                        index.next = new ListNode(sum, l1.next);
+                        break;
+                    } else {
+                        index.next = new ListNode(0);
+                        l1 = l1.next;
+                    }
+                } else {
+                    // 有+1 且两个都不是null
+                    sum = l1.val + l2.val + 1;
+                    if (sum < 10) {
+                        index.next = new ListNode(sum);
+                        addOne = false;
+                    } else {
+                        index.next = new ListNode(sum % 10);
+                    }
+                    l1 = l1.next;
+                    l2 = l2.next;
+                }
+            }
+            index = index.next;
         }
         return head;
     }
@@ -368,16 +397,17 @@ public class Solution {
         int[] intParam2 = {3, 4};
         //int[] result = new Solution().twoSum(intParam,0);
         ListNode l1 = new ListNode(1);
-        /*ListNode l11 = new ListNode(8);*/
-        /*ListNode l12 = new ListNode(3);*/
+        ListNode l11 = new ListNode(8);
+        ListNode l12 = new ListNode(3);
         ListNode l2 = new ListNode(9);
-        ListNode l21 = new ListNode(9);/*
-        ListNode l22 = new ListNode(4);*/
+        ListNode l21 = new ListNode(9);
+        ListNode l22 = new ListNode(4);
         l2.next = l21;
-        /*l1.next = l11;
+        l1.next = l11;
         l11.next = l12;
-        l21.next = l22;*/
-        //ListNode listNode = new Solution().addTwoNumbers(l1,l2);
-        System.out.println(new Solution().reverse(9646324351L));
+        l21.next = l22;
+        ListNode listNode = new Solution().addTwoNumbers(l1, l2);
+        System.out.println(listNode);
+        //System.out.println(new Solution().reverse(9646324351L));
     }
 }
