@@ -1,9 +1,6 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Solution {
     /**
@@ -285,9 +282,6 @@ public class Solution {
      */
     public String longestPalindrome(String s) {
         //先做空判断
-        if (s == null) {
-            return null;
-        }
         if ("".equals(s)) {
             return s;
         }
@@ -319,7 +313,6 @@ public class Solution {
                 i1++;
             }
         }
-
         return "";
     }
 
@@ -390,6 +383,149 @@ public class Solution {
         return reAbsX * factor;
     }
 
+
+    /**
+     * 汽车从起点出发驶向目的地，该目的地位于出发位置东面 target 英里处。
+     * <p>
+     * 沿途有加油站，每个 station[i] 代表一个加油站，它位于出发位置东面 station[i][0] 英里处，并且有 station[i][1] 升汽油。
+     * <p>
+     * 假设汽车油箱的容量是无限的，其中最初有 startFuel 升燃料。它每行驶 1 英里就会用掉 1 升汽油。
+     * <p>
+     * 当汽车到达加油站时，它可能停下来加油，将所有汽油从加油站转移到汽车中。
+     * <p>
+     * 为了到达目的地，汽车所必要的最低加油次数是多少？如果无法到达目的地，则返回 -1 。
+     * <p>
+     * 注意：如果汽车到达加油站时剩余燃料为 0，它仍然可以在那里加油。如果汽车到达目的地时剩余燃料为 0，仍然认为它已经到达目的地。
+     * <p>
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/minimum-number-of-refueling-stops
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param target
+     * @param startFuel
+     * @param stations
+     * @return
+     */
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        Queue<Integer> pq = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        int maxRoad = startFuel;
+        int minTime = 0;
+        for (int i = 0; i < stations.length; i++) {
+            if (maxRoad >= stations[i][0]) {
+                pq.offer(stations[i][1]);
+            } else {
+                while (pq.size() != 0) {
+                    maxRoad += pq.poll();
+                    minTime++;
+                    if (maxRoad >= target) {
+                        return minTime;
+                    }
+                    if (maxRoad >= stations[i][0]) {
+                        pq.offer(stations[i][1]);
+                        break;
+                    }
+                }
+                if (maxRoad < stations[i][0]) {
+                    return -1;
+                }
+            }
+        }
+        if (maxRoad >= target) {
+            return minTime;
+        } else {
+            while (pq.size() != 0) {
+                int maxFuel = pq.poll();
+                maxRoad += maxFuel;
+                minTime++;
+                if (maxRoad >= target) {
+                    return minTime;
+                }
+            }
+            return -1;
+        }
+    }
+
+    public int minRefuelStops_fail(int target, int startFuel, int[][] stations) {
+        if (stations.length == 0) {
+            return startFuel < target ? -1 : 0;
+        }
+        return oneStation(startFuel, target, -1, stations, 0);
+    }
+
+    private int oneStation(int currentFule, int remain, int index, int[][] stations, int minTime) {
+        //最后一站
+        if (index == stations.length - 1) {
+            //不用加油直接到终点
+            if (currentFule >= remain) {
+                return minTime;
+            }
+            currentFule = currentFule + stations[index][1];
+            return currentFule >= remain ? minTime + 1 : -1;
+        }
+        //起点
+        if (index == -1) {
+            //不用加油直接到终点
+            if (currentFule >= remain) {
+                return minTime;
+            }
+            //到不了第一个加油站
+            if (currentFule < stations[0][0]) {
+                return -1;
+            }
+            return oneStation(currentFule - stations[0][0], remain - stations[0][0], 0, stations, 0);
+        }
+        //中间
+        if (currentFule >= remain) {
+            return minTime;
+        }
+        //不加油
+        int gapToNext = getGap(stations, index + 1);
+        //不加油到不了下一站，一定得加油
+        if (currentFule < gapToNext) {
+            currentFule = currentFule + stations[index][1] - gapToNext;
+            //加了油也到不了下一站
+            if (currentFule < 0) {
+                return -1;
+            }
+            remain = remain - gapToNext;
+            index++;
+            minTime++;
+            return oneStation(currentFule, remain, index, stations, minTime);
+        }
+        //不加油能到下一站，可以选择不加油
+        int notRefule = oneStation(currentFule - gapToNext, remain - gapToNext, index + 1, stations, minTime);
+        int refule = oneStation(currentFule + stations[index][1] - gapToNext, remain - gapToNext, index + 1, stations, minTime + 1);
+        return getMin(notRefule, refule);
+    }
+
+    /**
+     * 获取当前加油站和上一个加油站之间的距离
+     *
+     * @param stations
+     * @param index
+     * @return
+     */
+    private int getGap(int[][] stations, int index) {
+        if (index == 0) {
+            return stations[0][0];
+        }
+        return stations[index][0] - stations[index - 1][0];
+    }
+
+    private int getMin(int notRefule, int refule) {
+        if (notRefule == refule) {
+            return notRefule;
+        }
+        if (notRefule == -1) {
+            return refule;
+        }
+        if (refule == -1) {
+            return notRefule;
+        }
+        return Math.min(notRefule, refule);
+    }
+
     public static void main(String[] args) {
         int[] intParam = {1, 3};
         int[] intParam2 = {2};
@@ -405,7 +541,11 @@ public class Solution {
         l11.next = l12;
         l21.next = l22;
         //ListNode listNode = new Solution().addTwoNumbers(l1, l2);
-        System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
+        //System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
         //System.out.println(new Solution().reverse(9646324351L));
+        //int [][] stops = {{10,60},{20,30},{30,30},{60,40}};
+        int[][] stops = {{25, 25}, {50, 50}};
+        //int [][] stops = {};
+        System.out.println(new Solution().minRefuelStops(100, 50, stops));
     }
 }
