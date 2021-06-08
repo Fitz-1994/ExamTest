@@ -526,6 +526,31 @@ public class Solution {
         return Math.min(notRefule, refule);
     }
 
+    /**
+     * 剑指 Offer 63. 股票的最大利润
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) {
+            return 0;
+        }
+        int minPrice = prices[0];
+        int max = 0;
+
+        for (int price : prices) {
+            if (price < minPrice) {
+                minPrice = price;
+            }
+            int gap = price - minPrice;
+            if (gap > max) {
+                max = gap;
+            }
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
         int[] intParam = {1, 3};
         int[] intParam2 = {2};
