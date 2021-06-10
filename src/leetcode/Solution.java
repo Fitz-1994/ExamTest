@@ -281,49 +281,43 @@ public class Solution {
      * @return
      */
     public String longestPalindrome(String s) {
-        //先做空判断
-        if ("".equals(s)) {
-            return s;
-        }
-        /*
-         * 第一种方法，逆转字符串
-         * */
-        //转换成字符数组
-        char[] sToChars = s.toCharArray();
-        char[] reversChars = new char[sToChars.length];
-        for (int i = sToChars.length; i > 0; i--) {
-            reversChars[i - 1] = sToChars[sToChars.length - i];
-        }
-        //利用两个字符数组找出最长公共子串
-        int i1 = 0;
-        int length = 1;
-        int j1 = 0;
-        while (i1 < sToChars.length) {
-            if (sToChars[i1] == reversChars[j1]) {
-                while (i1 + length < sToChars.length && j1 + length < sToChars.length) {
-                    if (sToChars[i1 + length] == reversChars[j1 + length]) {
-                        length++;
+        //DP解法
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        int resultBeg = 0;
+        int resultEnd = 0;
+        int maxLen = 1;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            for (int j = i; j < s.length(); j++) {
+                if (i == j) {
+                    dp[i][j] = true;
+                } else if (j == i + 1) {
+                    if (s.charAt(i) == s.charAt(j)) {
+                        dp[i][j] = true;
+                        if (maxLen < 2) {
+                            maxLen = 2;
+                            resultBeg = i;
+                            resultEnd = j;
+                        }
                     } else {
-
+                        dp[i][j] = false;
+                    }
+                } else {
+                    if (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]) {
+                        dp[i][j] = true;
+                        if (maxLen < j - i + 1) {
+                            maxLen = j - i + 1;
+                            resultBeg = i;
+                            resultEnd = j;
+                        }
+                    } else {
+                        dp[i][j] = false;
                     }
                 }
-            } else if (j1 < sToChars.length) {
-                j1++;
-            } else {
-                i1++;
             }
         }
-        return "";
+        return s.substring(resultBeg, resultEnd + 1);
     }
 
-    public boolean isRevers(char[] chars) {
-        for (int i = 0; i < chars.length / 2; i++) {
-            if (chars[i] != chars[chars.length - i - 1]) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     /**
      * 7.
@@ -552,25 +546,26 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        int[] intParam = {1, 3};
-        int[] intParam2 = {2};
+//        int[] intParam = {1, 3};
+//        int[] intParam2 = {2};
         //int[] result = new Solution().twoSum(intParam,0);
-        ListNode l1 = new ListNode(1);
-        ListNode l11 = new ListNode(8);
-        ListNode l12 = new ListNode(3);
-        ListNode l2 = new ListNode(9);
-        ListNode l21 = new ListNode(9);
-        ListNode l22 = new ListNode(4);
-        l2.next = l21;
-        l1.next = l11;
-        l11.next = l12;
-        l21.next = l22;
+//        ListNode l1 = new ListNode(1);
+//        ListNode l11 = new ListNode(8);
+//        ListNode l12 = new ListNode(3);
+//        ListNode l2 = new ListNode(9);
+//        ListNode l21 = new ListNode(9);
+//        ListNode l22 = new ListNode(4);
+//        l2.next = l21;
+//        l1.next = l11;
+//        l11.next = l12;
+//        l21.next = l22;
         //ListNode listNode = new Solution().addTwoNumbers(l1, l2);
         //System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
         //System.out.println(new Solution().reverse(9646324351L));
         //int [][] stops = {{10,60},{20,30},{30,30},{60,40}};
-        int[][] stops = {{25, 25}, {50, 50}};
+//        int[][] stops = {{25, 25}, {50, 50}};
         //int [][] stops = {};
-        System.out.println(new Solution().minRefuelStops(100, 50, stops));
+//        System.out.println(new Solution().minRefuelStops(100, 50, stops));
+        System.out.println(new Solution().longestPalindrome("babad"));
     }
 }
