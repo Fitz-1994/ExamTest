@@ -545,6 +545,77 @@ public class Solution {
         return max;
     }
 
+    /**
+     * 10. 正则表达式匹配
+     * @param s
+     * @param p
+     * @return
+     */
+//    public boolean isMatch(String s, String p) {
+//        if (p.length() == 0){
+//            return s.length()==0;
+//        }
+//        if (p.length() == 1){
+//            if (".".equals(p)){
+//                return s.length() == 1;
+//            }else {
+//                return p.equals(s);
+//            }
+//        }
+//        // dp[i][j]表示 s的第i位及之前与p的第j位及之前的匹配情况
+//        boolean[][] dp = new boolean[s.length()][p.length()];
+//        char[] pChars = p.toCharArray();
+//        char[] sChars = s.toCharArray();
+//        int i = 0;
+//        int j = 0;
+//        for (; i < pChars.length; i++) {
+//            if (pChars[i] != '.' && pChars[i] != '*'){
+//                dp[]
+//            }
+//        }
+//        return dp[s.length()-1][p.length()-1];
+//    }
+
+
+    /**
+     * 11. 盛最多水的容器
+     *
+     * @param height
+     * @return
+     */
+    public int maxArea(int[] height) {
+        int maxArea = 0;
+        int tail = height.length - 1;
+        int headLast = 0;
+        int tailLast = 0;
+        head:
+        for (int head = 0; head < tail; head++) {
+            if (height[head] <= headLast) {
+                continue;
+            }
+            for (; head < tail; tail--) {
+                if (height[tail] <= tailLast) {
+                    continue;
+                }
+                int area = getArea(height, head, tail);
+                if (area > maxArea) {
+                    maxArea = area;
+                }
+                if (height[head] < height[tail]) {
+                    headLast = height[head];
+                    continue head;
+                } else {
+                    tailLast = height[tail];
+                }
+            }
+        }
+        return maxArea;
+    }
+
+    private int getArea(int[] height, int i, int j) {
+        return Math.min(height[i], height[j]) * Math.abs(j - i);
+    }
+
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
@@ -566,6 +637,6 @@ public class Solution {
 //        int[][] stops = {{25, 25}, {50, 50}};
         //int [][] stops = {};
 //        System.out.println(new Solution().minRefuelStops(100, 50, stops));
-        System.out.println(new Solution().longestPalindrome("babad"));
+        System.out.println(new Solution().maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
     }
 }
