@@ -794,6 +794,76 @@ public class Solution {
 
     }
 
+//    Map<Character, String> phoneMap = new HashMap<Character, String>() {{
+//        put('2', "abc");
+//        put('3', "def");
+//        put('4', "ghi");
+//        put('5', "jkl");
+//        put('6', "mno");
+//        put('7', "pqrs");
+//        put('8', "tuv");
+//        put('9', "wxyz");
+//    }};
+//    public List<String> letterCombinations(String digits) {
+//
+//        if (digits.length() == 0 ){
+//            return new ArrayList<>();
+//        }
+//
+//        List<String> result = new LinkedList<>();
+//        digui(digits,0,new StringBuilder(),result);
+//        return result;
+//    }
+//
+//    public void digui(String digits,int index,StringBuilder stringBuilder,List<String> result){
+//        if (index == digits.length()){
+//            result.add(stringBuilder.toString());
+//            return;
+//        }
+//
+//        String letter = phoneMap.get(digits.charAt(index));
+//        for (char c : letter.toCharArray()) {
+//            stringBuilder.append(c);
+//            digui(digits,index+1,stringBuilder,result);
+//            stringBuilder.deleteCharAt(index);
+//        }
+//
+//    }
+
+    public List<String> letterCombinations(String digits) {
+        List<String> combinations = new ArrayList<String>();
+        if (digits.length() == 0) {
+            return combinations;
+        }
+        Map<Character, String> phoneMap = new HashMap<Character, String>() {{
+            put('2', "abc");
+            put('3', "def");
+            put('4', "ghi");
+            put('5', "jkl");
+            put('6', "mno");
+            put('7', "pqrs");
+            put('8', "tuv");
+            put('9', "wxyz");
+        }};
+        backtrack(combinations, phoneMap, digits, 0, new StringBuffer());
+        return combinations;
+    }
+
+    public void backtrack(List<String> combinations, Map<Character, String> phoneMap, String digits, int index, StringBuffer combination) {
+        if (index == digits.length()) {
+            combinations.add(combination.toString());
+        } else {
+            char digit = digits.charAt(index);
+            String letters = phoneMap.get(digit);
+            int lettersCount = letters.length();
+            for (int i = 0; i < lettersCount; i++) {
+                combination.append(letters.charAt(i));
+                backtrack(combinations, phoneMap, digits, index + 1, combination);
+                combination.deleteCharAt(index);
+            }
+        }
+    }
+
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
@@ -823,6 +893,11 @@ public class Solution {
 //        String s2 = new String("1")+new String("1");
 //        String s3 = s1.intern();
 
-        System.out.println(new Solution().threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
+//        System.out.println(new Solution().threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
+//        System.out.println(new Solution().letterCombinations("23"));
+        StringBuffer sb = new StringBuffer("1234567");
+        sb.deleteCharAt(2);
+        sb.append('a');
+        System.out.println(sb);
     }
 }
