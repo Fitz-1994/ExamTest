@@ -588,7 +588,6 @@ public class Solution {
         int tail = height.length - 1;
         int headLast = 0;
         int tailLast = 0;
-        head:
         for (int head = 0; head < tail; head++) {
             if (height[head] <= headLast) {
                 continue;
@@ -603,7 +602,7 @@ public class Solution {
                 }
                 if (height[head] < height[tail]) {
                     headLast = height[head];
-                    continue head;
+                    break;
                 } else {
                     tailLast = height[tail];
                 }
@@ -614,6 +613,185 @@ public class Solution {
 
     private int getArea(int[] height, int i, int j) {
         return Math.min(height[i], height[j]) * Math.abs(j - i);
+    }
+
+    /**
+     * 461. 汉明距离
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public int hammingDistance(int x, int y) {
+        char[] xBin = Integer.toBinaryString(x).toCharArray();
+        char[] yBin = Integer.toBinaryString(y).toCharArray();
+        int maxLength = Integer.max(xBin.length, yBin.length);
+        int distance = 0;
+        for (int i = 0; i < maxLength; i++) {
+            if (xBin.length - 1 - i < 0) {
+                if (yBin[yBin.length - 1 - i] != '0') {
+                    distance++;
+                }
+                continue;
+            }
+            if (yBin.length - 1 - i < 0) {
+                if (xBin[xBin.length - 1 - i] != '0') {
+                    distance++;
+                }
+                continue;
+            }
+            if (xBin[xBin.length - 1 - i] != yBin[yBin.length - 1 - i]) {
+                distance++;
+            }
+        }
+        return distance;
+    }
+
+//    public int[] findTop100(int[] nums){
+//        int[] top100 = new int[100];
+//        int min = nums[0];
+//        int minIndex = 0;
+//
+//        for (int i = 0; i < nums.length; i++) {
+//            if (i<100){
+//                top100[i] = nums[i];
+//                if (nums[i]<min){
+//                    min = nums[i];
+//                    minIndex = i;
+//                }
+//            }else {
+//                //最小值
+//
+//
+//            }
+//
+//
+//        }
+//
+//
+//    }
+
+    class Node {
+        String val;
+        Node next;
+
+        Node() {
+        }
+
+        Node(String val) {
+            this.val = val;
+        }
+
+        Node(String val, Node next) {
+            this.val = val;
+            this.next = next;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Node node = (Node) o;
+            return Objects.equals(val, node.val);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(val);
+        }
+    }
+
+    public boolean isCircle(Node node) {
+        Node node1 = node;
+        Node node2 = node;
+
+        while (node2 != null) {
+            node1 = node1.next;
+            node2 = node2.next;
+            if (node2 != null) {
+                node2 = node2.next;
+            } else {
+                return false;
+            }
+            if (node1.equals(node2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isContinuity(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        int zeroNum = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                zeroNum++;
+                continue;
+            }
+            if (nums[i] < min) {
+                min = nums[i];
+            }
+            if (nums[i] > max) {
+                max = nums[i];
+            }
+        }
+
+        if (zeroNum == nums.length) {
+            return true;
+        }
+        return max - min < nums.length;
+    }
+
+    public List<List<Integer>> threeSum(int[] nums) {
+        if (nums.length < 3) {
+            return new ArrayList<>();
+        }
+
+        Arrays.sort(nums);
+        int max = nums[nums.length - 1];
+        List<List<Integer>> result = new ArrayList<>(nums.length);
+        Map<Integer, Integer> numsMap = new HashMap<>(nums.length);
+        for (int i = 0; i < nums.length; i++) {
+            numsMap.put(nums[i], i);
+        }
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i != 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            for (int j = i + 1; j < nums.length - 1; j++) {
+                if (j != i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int needNum = -(nums[i] + nums[j]);
+                if (needNum > max) {
+                    continue;
+                }
+                Integer index = numsMap.get(needNum);
+                if (index == null) {
+                    continue;
+                }
+                if (index > j) {
+                    result.add(Arrays.asList(nums[i], nums[j], nums[index]));
+                    continue;
+                }
+//                for (int k = nums.length - 1; k >= j + 1; k--) {
+//                    if (nums[i]+nums[j]+nums[k] < 0){
+//                        continue;
+//                    }
+//                    if (k != j+1 && nums[k]==nums[k-1]){
+//                        continue;
+//                    }
+//                    if (nums[i]+nums[j]+nums[k] == 0){
+//                        result.add(Arrays.asList(nums[i],nums[j],nums[k]));
+//                    }
+//                }
+            }
+        }
+        return result;
+
     }
 
     public static void main(String[] args) {
@@ -637,6 +815,14 @@ public class Solution {
 //        int[][] stops = {{25, 25}, {50, 50}};
         //int [][] stops = {};
 //        System.out.println(new Solution().minRefuelStops(100, 50, stops));
-        System.out.println(new Solution().maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
+//        System.out.println(new Solution().maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
+//        System.out.println(new Solution().hammingDistance(3,1));
+//        System.out.println(new Solution().isContinuity(new int[]{2,1,0,0,6}));
+//        String s = "11";
+//        String s1 = new String("1")+new String("1");
+//        String s2 = new String("1")+new String("1");
+//        String s3 = s1.intern();
+
+        System.out.println(new Solution().threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
     }
 }
