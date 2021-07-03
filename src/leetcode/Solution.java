@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class Solution {
     /**
@@ -943,33 +944,34 @@ public class Solution {
         if (l2 == null){
             return l1;
         }
-        ListNode head,p,p1,p2;
-        p1 = l1;
-        p2 = l2;
-        if (p1.val < p2.val){
-            p = p1;
-            p1 = p1.next;
+        if (l1.val<l2.val){
+            l1.next = mergeTwoLists(l1.next,l2);
+            return l1;
         }else {
-            p = p2;
-            p2 = p2.next;
+            l2.next = mergeTwoLists(l1,l2.next);
+            return l2;
         }
-        head = p;
-        while (p1 != null && p2 != null){
-            if (p1.val < p2.val){
-                p.next = p1;
-                p1 = p1.next;
-            }else {
-                p.next = p2;
-                p2 = p2.next;
-            }
-            p = p.next;
+    }
+
+    /**
+     * 23. 合并K个升序链表
+     * 分治法 + 合并两个数组的的方法
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        return merge(lists, 0, lists.length - 1);
+    }
+
+    public ListNode merge(ListNode[] lists, int l, int r) {
+        if (l == r) {
+            return lists[l];
         }
-        if (p1 == null){
-            p.next = p2;
-        }else {
-            p.next = p1;
+        if (l > r) {
+            return null;
         }
-        return head;
+        int mid = (l + r) >> 1;
+        return mergeTwoLists(merge(lists, l, mid), merge(lists, mid + 1, r));
     }
 
     /**
@@ -1059,10 +1061,7 @@ public class Solution {
         _3.next = _4;
         _4.next = _5;
 //        System.out.println(new Solution().removeNthFromEnd(_1,2));
-        new Solution().nextPermutation(new int[]{1,0,3,5,7,91,65});
-
-        int[] num = new int[]{1,3,5};
-        Arrays.sort(num);
-        System.out.println(num);
+//        new Solution().nextPermutation(new int[]{1,0,3,5,7,91,65});
+        System.out.println(10^4);
     }
 }
