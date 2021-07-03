@@ -864,6 +864,156 @@ public class Solution {
         }
     }
 
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+//        int length = 0;
+//        ListNode i = head;
+//        while (i != null){
+//            length++;
+//            i = i.next;
+//        }
+//
+//        int removeIndex = length - n;
+//        ListNode j = head;
+//        ListNode jPre = null;
+//        int k = 0;
+//        while (k != removeIndex){
+//            jPre = j;
+//            j = j.next;
+//            k++;
+//        }
+//        if (jPre != null){
+//            jPre.next = j.next;
+//            return head;
+//        }
+//        return head.next;
+        List<ListNode> nodeList = new ArrayList<>(30);
+        ListNode i = head;
+        while (i != null){
+            nodeList.add(i);
+            i = i.next;
+        }
+        if (n == nodeList.size()){
+            return head.next;
+        }
+        int remodeIndex = nodeList.size() - n;
+        nodeList.get(remodeIndex-1).next = nodeList.get(remodeIndex).next;
+        return head;
+    }
+
+    public boolean isValid(String s) {
+        char[] sArr = s.toCharArray();
+        Stack<Character> stack = new Stack<>();
+        for (char c : sArr) {
+            switch (c){
+                case '(':
+                case '{':
+                case '[':
+                    stack.push(c);
+                    break;
+                case ')':
+                    if (stack.isEmpty() || stack.pop() != '('){
+                        return false;
+                    }
+                    break;
+                case '}':
+                    if (stack.isEmpty() || stack.pop() != '{'){
+                        return false;
+                    }
+                    break;
+                case ']':
+                    if (stack.isEmpty() || stack.pop() != '['){
+                        return false;
+                    }
+                    break;
+                default:
+                    return false;
+            }
+        }
+        return stack.isEmpty();
+
+    }
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null && l2 == null){
+            return null;
+        }
+        if (l1 == null){
+            return l2;
+        }
+        if (l2 == null){
+            return l1;
+        }
+        ListNode head,p,p1,p2;
+        p1 = l1;
+        p2 = l2;
+        if (p1.val < p2.val){
+            p = p1;
+            p1 = p1.next;
+        }else {
+            p = p2;
+            p2 = p2.next;
+        }
+        head = p;
+        while (p1 != null && p2 != null){
+            if (p1.val < p2.val){
+                p.next = p1;
+                p1 = p1.next;
+            }else {
+                p.next = p2;
+                p2 = p2.next;
+            }
+            p = p.next;
+        }
+        if (p1 == null){
+            p.next = p2;
+        }else {
+            p.next = p1;
+        }
+        return head;
+    }
+
+    /**
+     * 31. 下一个排列
+     * @param nums
+     */
+    public void nextPermutation(int[] nums) {
+        // 倒序找到实际上需要重新排列的起始位置 i
+        int i = nums.length - 2;
+        boolean isMax = true;
+        for (; i >= 0; i--) {
+            if (nums[i] < nums[i+1]){
+                isMax = false;
+                break;
+            }
+        }
+        // 最大组合 重新排序成最小组合 返回
+        if (isMax){
+            Arrays.sort(nums);
+            return;
+        }
+
+        // default is max gap
+        int minGap = 100;
+        int nextNumIndex = -1;
+
+        //找到第i位后的 大于 num[i]的最小数
+        for (int j = i+1; j < nums.length; j++) {
+            if (nums[j] > nums[i] && (nums[j]-nums[i]) < minGap){
+                minGap = nums[j]-nums[i];
+                nextNumIndex = j;
+            }
+        }
+
+        //交换第i位和第nextNumIndex位
+        int temp;
+        temp = nums[i];
+        nums[i] = nums[nextNumIndex];
+        nums[nextNumIndex] = temp;
+
+        Arrays.sort(nums,i+1,nums.length);
+        System.out.println(nums);
+    }
+
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
@@ -895,9 +1045,24 @@ public class Solution {
 
 //        System.out.println(new Solution().threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
 //        System.out.println(new Solution().letterCombinations("23"));
-        StringBuffer sb = new StringBuffer("1234567");
-        sb.deleteCharAt(2);
-        sb.append('a');
-        System.out.println(sb);
+//        StringBuffer sb = new StringBuffer("1234567");
+//        sb.deleteCharAt(2);
+//        sb.append('a');
+//        System.out.println(sb);
+        ListNode _1 = new ListNode(1);
+        ListNode _2 = new ListNode(2);
+        ListNode _3 = new ListNode(3);
+        ListNode _4 = new ListNode(4);
+        ListNode _5 = new ListNode(5);
+        _1.next = _2;
+        _2.next = _3;
+        _3.next = _4;
+        _4.next = _5;
+//        System.out.println(new Solution().removeNthFromEnd(_1,2));
+        new Solution().nextPermutation(new int[]{1,0,3,5,7,91,65});
+
+        int[] num = new int[]{1,3,5};
+        Arrays.sort(num);
+        System.out.println(num);
     }
 }
