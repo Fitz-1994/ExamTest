@@ -1016,6 +1016,99 @@ public class Solution {
         System.out.println(nums);
     }
 
+    /**
+     * 32. 最长有效括号
+     *  TODO 未完成
+     * @param s
+     * @return
+     */
+    public int longestValidParentheses(String s) {
+        Stack<Character> quotaStack = new Stack<>();
+        char[] chars = s.toCharArray();
+        char left = '(';
+        char right = ')';
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == left){
+                quotaStack.push(left);
+                builder.append(left);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * 33. 搜索旋转排序数组
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        /*
+        * 思路：
+        * 先比较nums[0] 与target的大小 ，确定target值在nums旋转点的前半段还是后半段
+        * 然后用二分查找找到旋转点
+        * 然后在target所在的半段数组中进行二分查找
+        * */
+        if (nums.length == 1){
+            return target == nums[0]?0:-1;
+        }
+        //先判断没有旋转的情况
+        int start = 0;
+        int end = nums.length-1;
+        int mid = -1;
+        if (nums[nums.length-1] < nums[0]){
+            boolean potision;
+            if (target >= nums[0] ){
+                //前半段
+                potision = true;
+            }else {
+                //后半段
+                potision = false;
+            }
+
+            while (end>=start){
+                mid = (start+end)/2;
+                if (nums[mid] > nums[mid+1]){
+                    break;
+                }
+                if (nums[mid] >= nums[0]){
+                    start = mid+1;
+                }else {
+                    end = mid-1;
+                }
+            }
+
+            //二分查找
+            if (potision){
+                start = 0;
+                end = mid;
+            }else {
+                start = mid+1;
+                end = nums.length-1;
+            }
+        }
+        //排除大于最大值和小于最小值的情况
+        if (target > nums[end] || target<nums[start]){
+            return -1;
+        }
+
+        while (end>=start){
+            mid = (start+end)/2;
+            if (nums[mid] == target){
+                return mid;
+            }
+            if(nums[mid] > target){
+                end = mid-1;
+            }else {
+                start = mid+1;
+            }
+        }
+        return -1;
+    }
+
+
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
@@ -1062,6 +1155,6 @@ public class Solution {
         _4.next = _5;
 //        System.out.println(new Solution().removeNthFromEnd(_1,2));
 //        new Solution().nextPermutation(new int[]{1,0,3,5,7,91,65});
-        System.out.println(10^4);
+        System.out.println(new Solution().search(new int[]{4,5,1,2,3},1));
     }
 }
