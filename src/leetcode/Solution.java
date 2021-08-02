@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.stream.Collectors;
 
 public class Solution {
     /**
@@ -1108,6 +1109,81 @@ public class Solution {
         return -1;
     }
 
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String,List<String>> resultMap = new HashMap<>();
+        for (String str : strs) {
+            String key = toOrderChar(str);
+            List<String> value = resultMap.get(key);
+            if (value == null) {
+                value = new ArrayList<>();
+            }
+            value.add(str);
+            resultMap.put(key,value);
+        }
+        return new ArrayList<>(resultMap.values());
+    }
+
+    private String toOrderChar(String s){
+        char[] sChars = s.toCharArray();
+        Arrays.sort(sChars);
+        return new String(sChars);
+    }
+
+    public int maxSubArray(int[] nums) {
+        int[] maxArr = new int[nums.length];
+        int max = nums[0];
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i==0){
+                maxArr[i] = nums[i];
+                continue;
+            }
+            maxArr[i] = Math.max(maxArr[i-1]+nums[i],nums[i]);
+            if (maxArr[i] > max){
+                max = maxArr[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 最远可到达位置，自解法，通过维护能否到达数组
+     * @param nums
+     * @return
+     */
+    public boolean canJump(int[] nums) {
+        if (nums.length == 1){
+            return true;
+        }
+
+        boolean[] resArr = new boolean[nums.length];
+        resArr[nums.length-1] = true;
+        for (int i = nums.length-2; i >=0 ; i--) {
+            resArr[i] = false;
+            for (int j = 1; j <= nums[i]; j++) {
+                if (resArr[i+j]){
+                    resArr[i] = true;
+                    break;
+                }
+            }
+        }
+        return resArr[0];
+    }
+
+    public boolean canJump1(int[] nums) {
+        int maxReachLength = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i<=maxReachLength){
+                maxReachLength = Math.max(maxReachLength,i+nums[i]);
+            }
+            if (maxReachLength >= nums.length-1){
+                return true;
+            }
+        }
+        return false;
+
+
+    }
 
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
@@ -1144,17 +1220,18 @@ public class Solution {
 //        sb.deleteCharAt(2);
 //        sb.append('a');
 //        System.out.println(sb);
-        ListNode _1 = new ListNode(1);
-        ListNode _2 = new ListNode(2);
-        ListNode _3 = new ListNode(3);
-        ListNode _4 = new ListNode(4);
-        ListNode _5 = new ListNode(5);
-        _1.next = _2;
-        _2.next = _3;
-        _3.next = _4;
-        _4.next = _5;
+//        ListNode _1 = new ListNode(1);
+//        ListNode _2 = new ListNode(2);
+//        ListNode _3 = new ListNode(3);
+//        ListNode _4 = new ListNode(4);
+//        ListNode _5 = new ListNode(5);
+//        _1.next = _2;
+//        _2.next = _3;
+//        _3.next = _4;
+//        _4.next = _5;
 //        System.out.println(new Solution().removeNthFromEnd(_1,2));
 //        new Solution().nextPermutation(new int[]{1,0,3,5,7,91,65});
-        System.out.println(new Solution().search(new int[]{4,5,1,2,3},1));
+//        System.out.println(new Solution().search(new int[]{4,5,1,2,3},1));
+        System.out.println(new Solution().canJump1(new int[]{3,2,1,0,4}));
     }
 }
