@@ -1181,8 +1181,36 @@ public class Solution {
             }
         }
         return false;
+    }
 
-
+    /**
+     * 56. 合并区间
+     * @param intervals
+     * @return
+     */
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        List<int[]> result = new ArrayList<>();
+        int[] currInterval = intervals[0];
+        for (int i = 1; i < intervals.length; i++) {
+            int[] interval = intervals[i];
+            // 合并区间
+            if (interval[0] <= currInterval[1]) {
+                currInterval[1] = Math.max(currInterval[1],interval[1]);
+                continue;
+            }
+            //不合并
+            result.add(currInterval);
+            currInterval = interval;
+        }
+        if (currInterval[0] != -1){
+            result.add(currInterval);
+        }
+        int[][] arrResult = new int[result.size()][2];
+        for (int i = 0; i < result.size(); i++) {
+            arrResult[i] = result.get(i);
+        }
+        return arrResult;
     }
 
     public static void main(String[] args) {
