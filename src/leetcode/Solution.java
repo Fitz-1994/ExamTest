@@ -48,98 +48,43 @@ public class Solution {
      * @return
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
-        }
-        if (l2 == null) {
-            return l1;
-        }
-        ListNode head;
-        int sum;
-        boolean addOne = false;
-        if (l1.val == 0) {
-            head = l2;
-        } else if (l2.val == 0) {
-            head = l1;
-        } else {
-            sum = l1.val + l2.val;
-            if (sum < 10) {
-                head = new ListNode(sum);
-            } else {
-                head = new ListNode(sum % 10);
-                addOne = true;
-            }
-        }
-        ListNode index = head;
-        l1 = l1.next;
-        l2 = l2.next;
+        return addDiGui(l1,l2,0);
+    }
 
-        while (true) {
-            //没有+1
-            if (!addOne) {
-                //判断是否有一个数已经算完
-                if (l1 == null) {
-                    index.next = l2;
-                    break;
-                }
-                if (l2 == null) {
-                    index.next = l1;
-                    break;
-                }
-                if (l1.val == 0) {
-                    index.next = l2;
-                } else if (l2.val == 0) {
-                    index.next = l1;
-                } else {
-                    sum = l1.val + l2.val;
-                    if (sum < 10) {
-                        index.next = new ListNode(sum);
-                    } else {
-                        index.next = new ListNode(sum % 10);
-                        addOne = true;
-                    }
-                }
-                l1 = l1.next;
-                l2 = l2.next;
-            } else {
-                //判断是否有一个数已经算完
-                if (l1 == null && l2 == null) {
-                    index.next = new ListNode(1);
-                    break;
-                } else if (l1 == null) {
-                    sum = l2.val + 1;
-                    if (sum < 10) {
-                        index.next = new ListNode(sum, l2.next);
-                        break;
-                    } else {
-                        index.next = new ListNode(0);
-                        l2 = l2.next;
-                    }
-                } else if (l2 == null) {
-                    sum = l1.val + 1;
-                    if (sum < 10) {
-                        index.next = new ListNode(sum, l1.next);
-                        break;
-                    } else {
-                        index.next = new ListNode(0);
-                        l1 = l1.next;
-                    }
-                } else {
-                    // 有+1 且两个都不是null
-                    sum = l1.val + l2.val + 1;
-                    if (sum < 10) {
-                        index.next = new ListNode(sum);
-                        addOne = false;
-                    } else {
-                        index.next = new ListNode(sum % 10);
-                    }
-                    l1 = l1.next;
-                    l2 = l2.next;
-                }
+    private ListNode addDiGui(ListNode l1,ListNode l2,int add){
+        if (l1 == null && l2 == null){
+            if (add == 0){
+                return null;
+            }else {
+                return new ListNode(1);
             }
-            index = index.next;
         }
-        return head;
+        if (l2 == null){
+            l2 = l1;
+            l1 = null;
+        }
+        if (l1 == null){
+            int sum = l2.val + add;
+            if (sum < 10){
+                l2.val = sum;
+                return l2;
+            }else {
+                l2.val = sum % 10;
+                l2.next = addDiGui(null,l2.next,1);
+                return l2;
+            }
+        }
+
+        int sum = l1.val+l2.val+add;
+        if (sum < 10){
+            l1.val = sum;
+            add = 0;
+        }else {
+            l1.val = sum%10;
+            add = 1;
+        }
+        l1.next = addDiGui(l1.next,l2.next,add);
+        return l1;
     }
 
     /**
@@ -166,29 +111,19 @@ public class Solution {
      * @return
      */
     public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
         int begin = 0;
         int end = 0;
         int max = 0;
-        char[] strArray = s.toCharArray();
-        Set<Character> charSet = new HashSet<>();
-        while (end < strArray.length){
-            if (charSet.contains(strArray[end])){
-                //找出与end相同的字符的位置
-                for (int i = begin; i < end; i++) {
-                    if (strArray[i] == strArray[end]){
-                        begin = i+1;
-                        break;
-                    }else {
-                        charSet.remove(strArray[i]);
-                    }
-                }
+        while (end < s.length()){
+            char endC = s.charAt(end);
+            if (!set.contains(endC)){
+                set.add(endC);
+                max = Math.max(max,end-begin+1);
                 end++;
             }else {
-                charSet.add(strArray[end]);
-                end++;
-                if (max < end-begin){
-                    max = end - begin;
-                }
+                set.remove(s.charAt(begin));
+                begin++;
             }
         }
         return max;
@@ -1217,17 +1152,33 @@ public class Solution {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
         //int[] result = new Solution().twoSum(intParam,0);
-//        ListNode l1 = new ListNode(1);
-//        ListNode l11 = new ListNode(8);
-//        ListNode l12 = new ListNode(3);
-//        ListNode l2 = new ListNode(9);
-//        ListNode l21 = new ListNode(9);
-//        ListNode l22 = new ListNode(4);
-//        l2.next = l21;
-//        l1.next = l11;
-//        l11.next = l12;
-//        l21.next = l22;
-        //ListNode listNode = new Solution().addTwoNumbers(l1, l2);
+        ListNode l11 = new ListNode(9);
+        ListNode l12 = new ListNode(9);
+        ListNode l13 = new ListNode(9);
+        ListNode l14 = new ListNode(9);
+        ListNode l15 = new ListNode(9);
+        ListNode l16 = new ListNode(9);
+        ListNode l17 = new ListNode(9);
+        ListNode l21 = new ListNode(9);
+        ListNode l22 = new ListNode(9);
+        ListNode l23 = new ListNode(9);
+        ListNode l24 = new ListNode(9);
+        l11.next = l12;
+        l12.next = l13;
+        l13.next = l14;
+        l14.next = l15;
+        l15.next = l16;
+        l16.next = l17;
+        l17.next = null;
+
+        l21.next = l22;
+        l22.next = l23;
+        l23.next = l24;
+        l24.next = null;
+
+//        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
+//        System.out.println(listNode);
+        System.out.println(new Solution().lengthOfLongestSubstring("abcabcbb"));
         //System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
         //System.out.println(new Solution().reverse(9646324351L));
         //int [][] stops = {{10,60},{20,30},{30,30},{60,40}};
@@ -1260,6 +1211,6 @@ public class Solution {
 //        System.out.println(new Solution().removeNthFromEnd(_1,2));
 //        new Solution().nextPermutation(new int[]{1,0,3,5,7,91,65});
 //        System.out.println(new Solution().search(new int[]{4,5,1,2,3},1));
-        System.out.println(new Solution().canJump1(new int[]{3,2,1,0,4}));
+//        System.out.println(new Solution().canJump1(new int[]{3,2,1,0,4}));
     }
 }
