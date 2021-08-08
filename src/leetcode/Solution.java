@@ -1182,12 +1182,73 @@ public class Solution {
         return reverDigui(next,current);
     }
 
+    /**
+     * 92. 反转链表 II
+     * @param head
+     * @param left
+     * @param right
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if (head.next == null){
+            return head;
+        }
+        if (left == right){
+            return head;
+        }
+        int pre = left-1;
+        int after = right+1;
+        ListNode preNode = null;
+        ListNode leftNode = null;
+        ListNode rightNode = null;
+        ListNode afterNode = null;
+        int i = 1;
+        ListNode index = head;
+        while (i <= after){
+            if (i == pre){
+                preNode = index;
+            }else if (i == left){
+                leftNode = index;
+            }else if (i == right){
+                rightNode = index;
+            }else if (i == after){
+                afterNode = index;
+            }
+            if (i < after){
+                index = index.next;
+            }
+            i++;
+        }
+
+        ListNode before = preNode;
+        ListNode mid = leftNode;
+        ListNode next = leftNode.next;
+        for (int j = 0; j < right - left + 1; j++) {
+            if (j == 0){
+                mid.next = afterNode;
+            }else {
+                mid.next = before;
+            }
+            before = mid;
+            mid = next;
+            if (next != null){
+                next = next.next;
+            }
+        }
+        if (preNode != null){
+            preNode.next = rightNode;
+            return head;
+        }else {
+            return rightNode;
+        }
+    }
+
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
         //int[] result = new Solution().twoSum(intParam,0);
-        ListNode l11 = new ListNode(9);
-        ListNode l12 = new ListNode(9);
+        ListNode l11 = new ListNode(3);
+        ListNode l12 = new ListNode(5);
         ListNode l13 = new ListNode(9);
         ListNode l14 = new ListNode(9);
         ListNode l15 = new ListNode(9);
@@ -1198,7 +1259,9 @@ public class Solution {
         ListNode l23 = new ListNode(9);
         ListNode l24 = new ListNode(9);
         l11.next = l12;
-        l12.next = l13;
+        l12.next = null;
+        ListNode result = new Solution().reverseBetween(l11,1,2);
+        System.out.println(result);
         l13.next = l14;
         l14.next = l15;
         l15.next = l16;
@@ -1212,7 +1275,7 @@ public class Solution {
 
 //        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
 //        System.out.println(listNode);
-        System.out.println(new Solution().longestPalindrome("aaaaa"));
+//        System.out.println(new Solution().longestPalindrome("aaaaa"));
         //System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
         //System.out.println(new Solution().reverse(9646324351L));
         //int [][] stops = {{10,60},{20,30},{30,30},{60,40}};
