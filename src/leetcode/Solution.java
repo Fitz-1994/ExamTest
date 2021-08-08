@@ -218,41 +218,38 @@ public class Solution {
      * @return
      */
     public String longestPalindrome(String s) {
-        //DP解法
-        boolean[][] dp = new boolean[s.length()][s.length()];
-        int resultBeg = 0;
-        int resultEnd = 0;
-        int maxLen = 1;
-        for (int i = s.length() - 1; i >= 0; i--) {
-            for (int j = i; j < s.length(); j++) {
-                if (i == j) {
-                    dp[i][j] = true;
-                } else if (j == i + 1) {
-                    if (s.charAt(i) == s.charAt(j)) {
-                        dp[i][j] = true;
-                        if (maxLen < 2) {
-                            maxLen = 2;
-                            resultBeg = i;
-                            resultEnd = j;
-                        }
-                    } else {
-                        dp[i][j] = false;
+        int length = s.length();
+        boolean[][] p = new boolean[length][length];
+        char[] chars = s.toCharArray();
+        int max = 1;
+        int begin = 0;
+        int end = 0;
+        for (int len = 1; len <= length; len++) {
+            int lastIndex = length - len;
+            for (int i = 0; i <= lastIndex; i++) {
+                if (len == 1){
+                    p[i][i] = true;
+                    continue;
+                }
+                int j = i+len-1;
+                if (len == 2){
+                    p[i][j] = chars[i]==chars[j];
+                    if (p[i][j] && max < 2){
+                        max = 2;
+                        begin = i;
+                        end = j;
                     }
-                } else {
-                    if (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]) {
-                        dp[i][j] = true;
-                        if (maxLen < j - i + 1) {
-                            maxLen = j - i + 1;
-                            resultBeg = i;
-                            resultEnd = j;
-                        }
-                    } else {
-                        dp[i][j] = false;
-                    }
+                    continue;
+                }
+                p[i][j] = p[i+1][j-1] && chars[i]==chars[j];
+                if (p[i][j] && max<len){
+                    max = len;
+                    begin = i;
+                    end = j;
                 }
             }
         }
-        return s.substring(resultBeg, resultEnd + 1);
+        return s.substring(begin,end+1);
     }
 
 
@@ -1178,7 +1175,7 @@ public class Solution {
 
 //        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
 //        System.out.println(listNode);
-        System.out.println(new Solution().lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(new Solution().longestPalindrome("aaaaa"));
         //System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
         //System.out.println(new Solution().reverse(9646324351L));
         //int [][] stops = {{10,60},{20,30},{30,30},{60,40}};
