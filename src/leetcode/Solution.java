@@ -1145,6 +1145,43 @@ public class Solution {
         return arrResult;
     }
 
+    /**
+     * 剑指 Offer II 024. 反转链表
+     * @param head
+     * @return
+     */
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next==null){
+            return head;
+        }
+
+        /*普通法反转链表*/
+        /*ListNode pre = null;
+        ListNode mid = head;
+        ListNode next = head.next;
+        while (next != null){
+            mid.next = pre;
+            pre = mid;
+            mid = next;
+            next = next.next;
+        }
+        mid.next = pre;
+        return mid;*/
+
+        /*递归法反转链表*/
+        return reverDigui(head,null);
+    }
+
+    private ListNode reverDigui(ListNode current,ListNode pre){
+        if (current.next == null){
+            current.next = pre;
+            return current;
+        }
+        ListNode next = current.next;
+        current.next = pre;
+        return reverDigui(next,current);
+    }
+
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
