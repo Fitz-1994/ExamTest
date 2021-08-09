@@ -763,37 +763,39 @@ public class Solution {
 //        }
 //
 //    }
-
+    public static Map<Character, String> phoneMap = new HashMap<Character, String>() {{
+        put('2', "abc");
+        put('3', "def");
+        put('4', "ghi");
+        put('5', "jkl");
+        put('6', "mno");
+        put('7', "pqrs");
+        put('8', "tuv");
+        put('9', "wxyz");
+    }};
     public List<String> letterCombinations(String digits) {
-        List<String> combinations = new ArrayList<String>();
-        if (digits.length() == 0) {
-            return combinations;
+        List<String> result = new ArrayList<>();
+        if (digits.length() == 0){
+            return result;
         }
-        Map<Character, String> phoneMap = new HashMap<Character, String>() {{
-            put('2', "abc");
-            put('3', "def");
-            put('4', "ghi");
-            put('5', "jkl");
-            put('6', "mno");
-            put('7', "pqrs");
-            put('8', "tuv");
-            put('9', "wxyz");
-        }};
-        backtrack(combinations, phoneMap, digits, 0, new StringBuffer());
-        return combinations;
+        letterBacktrace(digits,0,result,new StringBuilder());
+        return result;
     }
+    private void letterBacktrace(String digits, int index, List<String> result, StringBuilder sb){
+        char c = digits.charAt(index);
+        String letters = phoneMap.get(c);
 
-    public void backtrack(List<String> combinations, Map<Character, String> phoneMap, String digits, int index, StringBuffer combination) {
-        if (index == digits.length()) {
-            combinations.add(combination.toString());
-        } else {
-            char digit = digits.charAt(index);
-            String letters = phoneMap.get(digit);
-            int lettersCount = letters.length();
-            for (int i = 0; i < lettersCount; i++) {
-                combination.append(letters.charAt(i));
-                backtrack(combinations, phoneMap, digits, index + 1, combination);
-                combination.deleteCharAt(index);
+        if (index == digits.length()-1){
+            for (int i = 0; i < letters.length(); i++) {
+                sb.append(letters.charAt(i));
+                result.add(sb.toString());
+                sb.deleteCharAt(sb.length()-1);
+            }
+        }else {
+            for (int i = 0; i < letters.length(); i++) {
+                sb.append(letters.charAt(i));
+                letterBacktrace(digits,index+1,result,sb);
+                sb.deleteCharAt(sb.length()-1);
             }
         }
     }
@@ -1151,35 +1153,19 @@ public class Solution {
      * @return
      */
     public ListNode reverseList(ListNode head) {
-        if (head == null || head.next==null){
-            return head;
-        }
-
-        /*普通法反转链表*/
-        /*ListNode pre = null;
-        ListNode mid = head;
-        ListNode next = head.next;
-        while (next != null){
-            mid.next = pre;
-            pre = mid;
-            mid = next;
-            next = next.next;
-        }
-        mid.next = pre;
-        return mid;*/
-
-        /*递归法反转链表*/
-        return reverDigui(head,null);
+        if (head.next == null) return head;
+        ListNode last = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return last;
     }
 
-    private ListNode reverDigui(ListNode current,ListNode pre){
-        if (current.next == null){
-            current.next = pre;
-            return current;
-        }
-        ListNode next = current.next;
-        current.next = pre;
-        return reverDigui(next,current);
+    private ListNode reverDigui(ListNode head){
+        if (head.next == null) return head;
+        ListNode last = reverDigui(head.next);
+        head.next.next = head;
+        head.next = null;
+        return last;
     }
 
     /**
@@ -1243,6 +1229,62 @@ public class Solution {
         }
     }
 
+    /**
+     * 25. K 个一组翻转链表
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (k == 1){
+            return head;
+        }
+        ListNode p = head;
+        int i=1;
+        while (i < k && p != null){
+            p = p.next;
+            i++;
+        }
+        if (p == null){
+            return head;
+        }
+        if (i < k+1){
+            return head;
+        }
+        if (p.next != null){
+            p.next = reverseKGroup(p.next,k);
+        }
+        return reverseFrontK(head,k);
+    }
+
+    private ListNode reverseFrontK(ListNode head,int k){
+        ListNode p = head;
+        int i=0;
+        while (p != null){
+            p = p.next;
+            i++;
+        }
+        if (i < k){
+            return head;
+        }
+
+        ListNode pre = null;
+        p = head;
+        ListNode next = head.next;
+        i=0;
+        while (i<k){
+            p.next = pre;
+            pre = p;
+            p = next;
+            if (next != null){
+                next = next.next;
+            }
+            i++;
+        }
+        head.next = p;
+        return pre;
+    }
+
     public static void main(String[] args) {
 //        int[] intParam = {1, 3};
 //        int[] intParam2 = {2};
@@ -1260,8 +1302,8 @@ public class Solution {
         ListNode l24 = new ListNode(9);
         l11.next = l12;
         l12.next = null;
-        ListNode result = new Solution().reverseBetween(l11,1,2);
-        System.out.println(result);
+//        ListNode result = new Solution().reverseBetween(l11,1,2);
+//        System.out.println(result);
         l13.next = l14;
         l14.next = l15;
         l15.next = l16;
@@ -1291,7 +1333,7 @@ public class Solution {
 //        String s3 = s1.intern();
 
 //        System.out.println(new Solution().threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
-//        System.out.println(new Solution().letterCombinations("23"));
+        System.out.println(new Solution().letterCombinations("23"));
 //        StringBuffer sb = new StringBuffer("1234567");
 //        sb.deleteCharAt(2);
 //        sb.append('a');
