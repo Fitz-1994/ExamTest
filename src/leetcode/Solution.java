@@ -22,14 +22,16 @@ public class Solution {
      * @return
      */
     public int[] twoSum(int[] nums, int target) {
+        Map<Integer,Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                if (nums[i] + nums[j] == target) {
-                    return new int[]{i, j};
-                }
+            Integer index = map.get(target-nums[i]);
+            if (index == null){
+                map.put(nums[i],i);
+            }else {
+                return new int[]{i,index};
             }
         }
-        return new int[2];
+        return new int[0];
     }
 
     /**
@@ -1286,9 +1288,9 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-//        int[] intParam = {1, 3};
-//        int[] intParam2 = {2};
-        //int[] result = new Solution().twoSum(intParam,0);
+        int[] intParam = {2,7,11,15};
+        int[] intParam2 = {2};
+        int[] result = new Solution().twoSum(intParam,9);
         ListNode l11 = new ListNode(3);
         ListNode l12 = new ListNode(5);
         ListNode l13 = new ListNode(9);
@@ -1333,7 +1335,7 @@ public class Solution {
 //        String s3 = s1.intern();
 
 //        System.out.println(new Solution().threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
-        System.out.println(new Solution().letterCombinations("23"));
+//        System.out.println(new Solution().letterCombinations("23"));
 //        StringBuffer sb = new StringBuffer("1234567");
 //        sb.deleteCharAt(2);
 //        sb.append('a');
