@@ -1431,6 +1431,41 @@ public class Solution {
         return paths[m - 1][n - 1];
     }
 
+    /**
+     * 64. 最小路径和
+     *
+     * @param grid
+     * @return
+     */
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] paths = new int[m][n];
+        return minPathBackTrace(0, 0, paths, grid);
+    }
+
+    private int minPathBackTrace(int i, int j, int[][] paths, int[][] grid) {
+        if (paths[i][j] != 0) {
+            return paths[i][j];
+        }
+        if (i == paths.length - 1 && j == paths[0].length - 1) {
+            paths[i][j] = grid[i][j];
+            return paths[i][j];
+        }
+        if (i == paths.length - 1) {
+            paths[i][j] = minPathBackTrace(i, j + 1, paths, grid) + grid[i][j];
+            return paths[i][j];
+        }
+        if (j == paths[0].length - 1) {
+            paths[i][j] = minPathBackTrace(i + 1, j, paths, grid) + grid[i][j];
+            return paths[i][j];
+        }
+        int down = minPathBackTrace(i + 1, j, paths, grid);
+        int right = minPathBackTrace(i, j + 1, paths, grid);
+        paths[i][j] = Math.min(down, right) + grid[i][j];
+        return paths[i][j];
+    }
+
     public static void main(String[] args) {
         int[] intParam = {2, 7, 11, 15};
         int[] intParam2 = {2};
