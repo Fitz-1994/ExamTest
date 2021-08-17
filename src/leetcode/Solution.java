@@ -1,8 +1,6 @@
 package leetcode;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.stream.Collectors;
 
 public class Solution {
     /**
@@ -1393,21 +1391,50 @@ public class Solution {
     }
 
     private void permuteBt(int n, List<List<Integer>> res,List<Integer> curList,int index){
-        if (index == n-1){
+        if (index == n - 1) {
             res.add(new ArrayList<>(curList));
             return;
         }
         for (int i = index; i < n; i++) {
-            Collections.swap(curList,index,i);
-            permuteBt(n, res, curList, index+1);
-            Collections.swap(curList,i,index);
+            Collections.swap(curList, index, i);
+            permuteBt(n, res, curList, index + 1);
+            Collections.swap(curList, i, index);
         }
     }
 
+    /**
+     * 62. 不同路径
+     *
+     * @param m
+     * @param n
+     * @return
+     */
+
+    public int uniquePaths(int m, int n) {
+        int[][] paths = new int[m][n];
+        for (int i = 0; i < n; i++) {
+            paths[0][i] = 1;
+        }
+        for (int i = 0; i < m; i++) {
+            paths[i][0] = 1;
+        }
+        return npBackTrace(m, n, paths);
+    }
+
+    private int npBackTrace(int m, int n, int[][] paths) {
+        if (paths[m - 1][n - 1] != 0) {
+            return paths[m - 1][n - 1];
+        }
+        int down = npBackTrace(m - 1, n, paths);
+        int right = npBackTrace(m, n - 1, paths);
+        paths[m - 1][n - 1] = down + right;
+        return paths[m - 1][n - 1];
+    }
+
     public static void main(String[] args) {
-        int[] intParam = {2,7,11,15};
+        int[] intParam = {2, 7, 11, 15};
         int[] intParam2 = {2};
-        int[] result = new Solution().twoSum(intParam,9);
+        int[] result = new Solution().twoSum(intParam, 9);
         ListNode l11 = new ListNode(3);
         ListNode l12 = new ListNode(5);
         ListNode l13 = new ListNode(9);
