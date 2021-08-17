@@ -680,54 +680,36 @@ public class Solution {
         return max - min < nums.length;
     }
 
+    /**
+     * 15. 三数之和
+     * @param nums
+     * @return
+     */
     public List<List<Integer>> threeSum(int[] nums) {
-        if (nums.length < 3) {
-            return new ArrayList<>();
-        }
-
         Arrays.sort(nums);
-        int max = nums[nums.length - 1];
-        List<List<Integer>> result = new ArrayList<>(nums.length);
-        Map<Integer, Integer> numsMap = new HashMap<>(nums.length);
+        List<List<Integer>> result = new ArrayList<>();
         for (int i = 0; i < nums.length; i++) {
-            numsMap.put(nums[i], i);
-        }
-
-        for (int i = 0; i < nums.length - 2; i++) {
-            if (i != 0 && nums[i] == nums[i - 1]) {
+            if (i>0 && nums[i-1]==nums[i]){
                 continue;
             }
-            for (int j = i + 1; j < nums.length - 1; j++) {
-                if (j != i + 1 && nums[j] == nums[j - 1]) {
+            int k = nums.length-1;
+            for (int j = i+1; j < k; j++) {
+                if (j>i+1 && nums[j-1] == nums[j]){
                     continue;
                 }
-                int needNum = -(nums[i] + nums[j]);
-                if (needNum > max) {
-                    continue;
+                int target = -(nums[i]+nums[j]);
+                while (j < k && nums[k] > target){
+                    k--;
                 }
-                Integer index = numsMap.get(needNum);
-                if (index == null) {
-                    continue;
+                if (j >= k){
+                    break;
                 }
-                if (index > j) {
-                    result.add(Arrays.asList(nums[i], nums[j], nums[index]));
-                    continue;
+                if (nums[k] == target){
+                    result.add(Arrays.asList(nums[i],nums[j],nums[k]));
                 }
-//                for (int k = nums.length - 1; k >= j + 1; k--) {
-//                    if (nums[i]+nums[j]+nums[k] < 0){
-//                        continue;
-//                    }
-//                    if (k != j+1 && nums[k]==nums[k-1]){
-//                        continue;
-//                    }
-//                    if (nums[i]+nums[j]+nums[k] == 0){
-//                        result.add(Arrays.asList(nums[i],nums[j],nums[k]));
-//                    }
-//                }
             }
         }
         return result;
-
     }
 
 //    Map<Character, String> phoneMap = new HashMap<Character, String>() {{
@@ -1120,6 +1102,36 @@ public class Solution {
     }
 
     /**
+     * 48. 旋转图像
+     * @param matrix
+     */
+    public void rotate(int[][] matrix) {
+        if (matrix.length == 1){
+            return;
+        }
+        int n = matrix.length;
+        // 水平翻转
+        for (int i = 0; i < n / 2; i++) {
+            int reverseLine = n-1-i;
+            for (int j = 0; j < n; j++) {
+                repleace(matrix,i,j,reverseLine,j);
+            }
+        }
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                repleace(matrix,i,j,j,i);
+            }
+        }
+    }
+
+    private void repleace(int[][] matrix,int i1,int j1,int i2,int j2){
+        int temp = matrix[i1][j1];
+        matrix[i1][j1] = matrix[i2][j2];
+        matrix[i2][j2] = temp;
+    }
+
+    /**
      * 56. 合并区间
      * @param intervals
      * @return
@@ -1285,6 +1297,111 @@ public class Solution {
         }
         head.next = p;
         return pre;
+    }
+
+    /**
+     * 141. 环形链表
+     * @param head
+     * @return
+     */
+    public boolean hasCycle(ListNode head) {
+        if (head == null){
+            return false;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+        do {
+            slow = slow.next;
+            if (fast!=null &&fast.next !=null){
+                fast = fast.next.next;
+            }else {
+                return false;
+            }
+        }while (slow != fast);
+        return true;
+    }
+
+    /**
+     * 142. 环形链表 II
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        if (head == null){
+            return null;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+        do {
+            slow = slow.next;
+            if (fast!=null &&fast.next !=null){
+                fast = fast.next.next;
+            }else {
+                return null;
+            }
+        }while (slow != fast);
+        ListNode cyclePoint = head;
+        while (cyclePoint != slow){
+            cyclePoint = cyclePoint.next;
+            slow = slow.next;
+        }
+        return cyclePoint;
+    }
+
+    public List<List<Integer>> combinationSum(int[] candidates,int target){
+        Arrays.sort(candidates);
+        List<List<Integer>> result = new ArrayList<>();
+        backTrace(result,candidates,target, new ArrayList(),0,0);
+        return result;
+    }
+
+    private void backTrace(List<List<Integer>> result, int[] candidates, int target, List<Integer> curList, int index,int sum ){
+        //回溯基本结构
+        for (int i = index; i < candidates.length; i++) {
+            curList.add(candidates[i]);
+            int curSum = sum+candidates[i];
+            if (curSum == target) {
+                List<Integer> oneResult = new ArrayList<>(curList);
+                result.add(oneResult);
+                curList.remove(curList.size() - 1);
+            } else if (curSum < target) {
+                int gap = target - curSum;
+                if (gap < candidates[i]){
+                    curList.remove(curList.size() - 1);
+                    continue;
+                }
+                backTrace(result, candidates, target, curList, i,curSum);
+                curList.remove(curList.size() - 1);
+            }else {
+                curList.remove(curList.size() - 1);
+                break;
+            }
+        }
+    }
+
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> curList = new ArrayList<>(nums.length);
+        for (int i = 0; i < nums.length; i++) {
+            curList.add(nums[i]);
+        }
+        int n = nums.length;
+        permuteBt(n,res,curList,0);
+        return res;
+    }
+
+    private void permuteBt(int n, List<List<Integer>> res,List<Integer> curList,int index){
+        if (index == n-1){
+            res.add(new ArrayList<>(curList));
+            return;
+        }
+        for (int i = index; i < n; i++) {
+            Collections.swap(curList,index,i);
+            permuteBt(n, res, curList, index+1);
+            Collections.swap(curList,i,index);
+        }
     }
 
     public static void main(String[] args) {
