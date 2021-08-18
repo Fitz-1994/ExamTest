@@ -1466,6 +1466,92 @@ public class Solution {
         return paths[i][j];
     }
 
+    /**
+     * 70. 爬楼梯
+     *
+     * @param n
+     * @return
+     */
+    public int climbStairs(int n) {
+        if (n <= 1) {
+            return 1;
+        }
+        int[] nums = new int[n + 1];
+        nums[0] = 1;
+        nums[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            nums[i] = nums[i - 1] + nums[i - 2];
+        }
+        return nums[n];
+    }
+
+    /**
+     * 94. 二叉树的中序遍历
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        zhongxu(root, result);
+        return result;
+    }
+
+    private void zhongxu(TreeNode treeNode, List<Integer> result) {
+        if (treeNode.left == null && treeNode.right == null) {
+            result.add(treeNode.val);
+        } else if (treeNode.left == null) {
+            result.add(treeNode.val);
+            zhongxu(treeNode.right, result);
+        } else if (treeNode.right == null) {
+            zhongxu(treeNode.left, result);
+            result.add(treeNode.val);
+        } else {
+            zhongxu(treeNode.left, result);
+            result.add(treeNode.val);
+            zhongxu(treeNode.right, result);
+        }
+    }
+
+    /**
+     * 94. 二叉树的中序遍历
+     * 非递归中序遍历
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> inorderTraversal2(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+
+        while (true) {
+            if (root.left == null) {
+                result.add(root.val);
+                if (root.right == null) {
+                    if (stack.empty()) {
+                        break;
+                    } else {
+                        root = stack.pop();
+                        root.left = null;
+                    }
+                } else {
+                    root = root.right;
+                }
+            } else {
+                stack.push(root);
+                root = root.left;
+            }
+        }
+        return result;
+    }
+
+
     public static void main(String[] args) {
         int[] intParam = {2, 7, 11, 15};
         int[] intParam2 = {2};
@@ -1495,6 +1581,13 @@ public class Solution {
         l22.next = l23;
         l23.next = l24;
         l24.next = null;
+
+        TreeNode t1 = new TreeNode(1);
+        TreeNode t2 = new TreeNode(2);
+        TreeNode t3 = new TreeNode(3);
+        t1.right = t2;
+        t2.left = t3;
+        System.out.println(new Solution().inorderTraversal2(t1));
 
 //        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
 //        System.out.println(listNode);
