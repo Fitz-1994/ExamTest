@@ -1551,11 +1551,56 @@ public class Solution {
         return result;
     }
 
+    /**
+     * 96. 不同的二叉搜索树
+     *
+     * @param n
+     * @return
+     */
+    public int numTrees(int n) {
+        if (n == 1 || n == 2) {
+            return n;
+        }
+        int[] nums = new int[n];
+        nums[0] = 1;
+        nums[1] = 2;
+        //以i为root
+        return numTreesDigui(n, nums);
+    }
+
+    /**
+     * n个连续数字可以组成多少二叉树
+     *
+     * @param n
+     * @param nums
+     * @return
+     */
+    private int numTreesDigui(int n, int[] nums) {
+        if (nums[n - 1] != 0) {
+            return nums[n - 1];
+        }
+        int sum = 0;
+        for (int i = 1; i <= n; i++) {
+            if (i == 1) {
+                sum += numTreesDigui(n - 1, nums);
+            } else if (i == n) {
+                sum += numTreesDigui(n - 1, nums);
+            } else {
+                int left = numTreesDigui(i - 1, nums);
+                int right = numTreesDigui(n - i, nums);
+                sum += left * right;
+            }
+        }
+        nums[n - 1] = sum;
+        return sum;
+    }
+
 
     public static void main(String[] args) {
+        System.out.println(new Solution().numTrees(3));
         int[] intParam = {2, 7, 11, 15};
         int[] intParam2 = {2};
-        int[] result = new Solution().twoSum(intParam, 9);
+        //int[] result = new Solution().twoSum(intParam, 9);
         ListNode l11 = new ListNode(3);
         ListNode l12 = new ListNode(5);
         ListNode l13 = new ListNode(9);
@@ -1587,7 +1632,7 @@ public class Solution {
         TreeNode t3 = new TreeNode(3);
         t1.right = t2;
         t2.left = t3;
-        System.out.println(new Solution().inorderTraversal2(t1));
+        //System.out.println(new Solution().inorderTraversal2(t1));
 
 //        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
 //        System.out.println(listNode);
