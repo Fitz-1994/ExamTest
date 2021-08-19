@@ -1595,9 +1595,37 @@ public class Solution {
         return sum;
     }
 
+    /**
+     * 98. 验证二叉搜索树
+     *
+     * @param root
+     * @return
+     */
+    public boolean isValidBST(TreeNode root) {
+        return helper(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    private boolean helper(TreeNode root, long min, long max) {
+        if (root == null) {
+            return true;
+        }
+        if (root.val <= min || root.val >= max) {
+            return false;
+        }
+        boolean left = true;
+        boolean right = true;
+        if (root.left != null) {
+            left = helper(root.left, min, root.val);
+        }
+        if (root.right != null) {
+            right = helper(root.right, root.val, max);
+        }
+        return left && right;
+    }
+
 
     public static void main(String[] args) {
-        System.out.println(new Solution().numTrees(3));
+//        System.out.println(new Solution().numTrees(3));
         int[] intParam = {2, 7, 11, 15};
         int[] intParam2 = {2};
         //int[] result = new Solution().twoSum(intParam, 9);
@@ -1627,12 +1655,17 @@ public class Solution {
         l23.next = l24;
         l24.next = null;
 
-        TreeNode t1 = new TreeNode(1);
-        TreeNode t2 = new TreeNode(2);
+        TreeNode t5 = new TreeNode(5);
+        TreeNode t4 = new TreeNode(4);
+        TreeNode t6 = new TreeNode(6);
         TreeNode t3 = new TreeNode(3);
-        t1.right = t2;
-        t2.left = t3;
-        //System.out.println(new Solution().inorderTraversal2(t1));
+        TreeNode t7 = new TreeNode(7);
+
+        t5.left = t4;
+        t5.right = t6;
+        t6.left = t3;
+        t6.right = t7;
+        System.out.println(new Solution().isValidBST(t5));
 
 //        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
 //        System.out.println(listNode);
