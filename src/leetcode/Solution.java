@@ -1716,7 +1716,12 @@ public class Solution {
      * @param inorder
      * @return
      */
+    private static Map<Integer, Integer> inOrderMap;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
+        inOrderMap = new HashMap<>(inorder.length);
+        for (int i = 0; i < inorder.length; i++) {
+            inOrderMap.put(inorder[i], i);
+        }
         return buildTreeDigui(preorder, inorder, 0, 0, preorder.length - 1);
     }
 
@@ -1728,10 +1733,7 @@ public class Solution {
         if (preIndex == preorder.length - 1 || inRangeBegin == inRangeEnd) {
             return root;
         }
-        int inOrderRootIndex = inRangeBegin;
-        while (inorder[inOrderRootIndex] != preorder[preIndex]) {
-            inOrderRootIndex++;
-        }
+        int inOrderRootIndex = inOrderMap.get(preorder[preIndex]);
         root.left = buildTreeDigui(preorder, inorder, preIndex + 1, inRangeBegin, inOrderRootIndex - 1);
         root.right = buildTreeDigui(preorder, inorder, preIndex + 1 + inOrderRootIndex - inRangeBegin, inOrderRootIndex + 1, inRangeEnd);
         return root;
