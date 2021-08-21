@@ -1623,6 +1623,120 @@ public class Solution {
         return left && right;
     }
 
+    /**
+     * 101. 对称二叉树
+     * 递归做法
+     *
+     * @param root
+     * @return
+     */
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null || (root.left == null && root.right == null)) {
+            return true;
+        }
+        return compare(root.left, root.right);
+    }
+
+    private boolean compare(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null) {
+            return false;
+        }
+        if (left.val != right.val) {
+            return false;
+        }
+        return compare(left.left, right.right) && compare(left.right, right.left);
+    }
+
+    /**
+     * 101. 对称二叉树
+     * 非递归做法  TODO
+     *
+     * @param root
+     * @return
+     */
+    public boolean isSymmetric2(TreeNode root) {
+        if (root == null || (root.left == null && root.right == null)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 102. 二叉树的层序遍历
+     *
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+
+        List<List<Integer>> result = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            Queue<TreeNode> nextQueue = new LinkedList<>();
+            List<Integer> resList = new ArrayList<>();
+            for (TreeNode node : queue) {
+                resList.add(node.val);
+                if (node.left != null) {
+                    nextQueue.offer(node.left);
+                }
+                if (node.right != null) {
+                    nextQueue.offer(node.right);
+                }
+            }
+            result.add(resList);
+            queue = nextQueue;
+        }
+        return result;
+    }
+
+    /**
+     * 104. 二叉树的最大深度
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(maxDepth(root.left) + 1, maxDepth(root.right) + 1);
+    }
+
+    /**
+     * 105. 从前序与中序遍历序列构造二叉树
+     *
+     * @param preorder
+     * @param inorder
+     * @return
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return buildTreeDigui(preorder, inorder, 0, 0, preorder.length - 1);
+    }
+
+    private TreeNode buildTreeDigui(int[] preorder, int[] inorder, int preIndex, int inRangeBegin, int inRangeEnd) {
+        if (preIndex >= preorder.length || inRangeBegin > inRangeEnd) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[preIndex]);
+        if (preIndex == preorder.length - 1 || inRangeBegin == inRangeEnd) {
+            return root;
+        }
+        int inOrderRootIndex = inRangeBegin;
+        while (inorder[inOrderRootIndex] != preorder[preIndex]) {
+            inOrderRootIndex++;
+        }
+        root.left = buildTreeDigui(preorder, inorder, preIndex + 1, inRangeBegin, inOrderRootIndex - 1);
+        root.right = buildTreeDigui(preorder, inorder, preIndex + 1 + inOrderRootIndex - inRangeBegin, inOrderRootIndex + 1, inRangeEnd);
+        return root;
+    }
+
 
     public static void main(String[] args) {
 //        System.out.println(new Solution().numTrees(3));
@@ -1665,8 +1779,9 @@ public class Solution {
         t5.right = t6;
         t6.left = t3;
         t6.right = t7;
-        System.out.println(new Solution().isValidBST(t5));
-
+//        System.out.println(new Solution().isValidBST(t5));
+        TreeNode root = new Solution().buildTree(new int[]{1, 2}, new int[]{1, 2});
+        System.out.println(root);
 //        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
 //        System.out.println(listNode);
 //        System.out.println(new Solution().longestPalindrome("aaaaa"));
