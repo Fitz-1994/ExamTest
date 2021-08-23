@@ -1739,86 +1739,62 @@ public class Solution {
         return root;
     }
 
+    /**
+     * 114. 二叉树展开为链表
+     *
+     * @param root
+     */
+    public void flatten(TreeNode root) {
+        List<TreeNode> preOrder = new ArrayList<>();
+        preOrder(root, preOrder);
+        for (int i = 0; i < preOrder.size() - 1; i++) {
+            preOrder.get(i).left = null;
+            preOrder.get(i).right = preOrder.get(i + 1);
+        }
+    }
+
+    private void preOrder(TreeNode root, List<TreeNode> preOrder) {
+        if (root != null) {
+            preOrder.add(root);
+            preOrder(root.left, preOrder);
+            preOrder(root.right, preOrder);
+        }
+    }
+
+    /**
+     * 215. 数组中的第K个最大元素
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(k);
+        for (int i = 0; i < nums.length; i++) {
+            if (i < k) {
+                pq.offer(nums[i]);
+            } else {
+                if (nums[i] < pq.peek()) {
+                    pq.poll();
+                    pq.offer(nums[i]);
+                }
+            }
+        }
+        for (int i = 0; i < k - 1; i++) {
+            pq.poll();
+        }
+        return pq.peek();
+    }
+
 
     public static void main(String[] args) {
-//        System.out.println(new Solution().numTrees(3));
-        int[] intParam = {2, 7, 11, 15};
-        int[] intParam2 = {2};
-        //int[] result = new Solution().twoSum(intParam, 9);
-        ListNode l11 = new ListNode(3);
-        ListNode l12 = new ListNode(5);
-        ListNode l13 = new ListNode(9);
-        ListNode l14 = new ListNode(9);
-        ListNode l15 = new ListNode(9);
-        ListNode l16 = new ListNode(9);
-        ListNode l17 = new ListNode(9);
-        ListNode l21 = new ListNode(9);
-        ListNode l22 = new ListNode(9);
-        ListNode l23 = new ListNode(9);
-        ListNode l24 = new ListNode(9);
-        l11.next = l12;
-        l12.next = null;
-//        ListNode result = new Solution().reverseBetween(l11,1,2);
-//        System.out.println(result);
-        l13.next = l14;
-        l14.next = l15;
-        l15.next = l16;
-        l16.next = l17;
-        l17.next = null;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.offer(1);
+        pq.offer(2);
+        pq.offer(3);
+        pq.offer(4);
+        pq.offer(5);
 
-        l21.next = l22;
-        l22.next = l23;
-        l23.next = l24;
-        l24.next = null;
-
-        TreeNode t5 = new TreeNode(5);
-        TreeNode t4 = new TreeNode(4);
-        TreeNode t6 = new TreeNode(6);
-        TreeNode t3 = new TreeNode(3);
-        TreeNode t7 = new TreeNode(7);
-
-        t5.left = t4;
-        t5.right = t6;
-        t6.left = t3;
-        t6.right = t7;
-//        System.out.println(new Solution().isValidBST(t5));
-        TreeNode root = new Solution().buildTree(new int[]{1, 2}, new int[]{1, 2});
-        System.out.println(root);
-//        ListNode listNode = new Solution().addTwoNumbers(l11, l21);
-//        System.out.println(listNode);
-//        System.out.println(new Solution().longestPalindrome("aaaaa"));
-        //System.out.println(new Solution().findMedianSortedArrays(intParam, intParam2));
-        //System.out.println(new Solution().reverse(9646324351L));
-        //int [][] stops = {{10,60},{20,30},{30,30},{60,40}};
-//        int[][] stops = {{25, 25}, {50, 50}};
-        //int [][] stops = {};
-//        System.out.println(new Solution().minRefuelStops(100, 50, stops));
-//        System.out.println(new Solution().maxArea(new int[]{1, 8, 6, 2, 5, 4, 8, 3, 7}));
-//        System.out.println(new Solution().hammingDistance(3,1));
-//        System.out.println(new Solution().isContinuity(new int[]{2,1,0,0,6}));
-//        String s = "11";
-//        String s1 = new String("1")+new String("1");
-//        String s2 = new String("1")+new String("1");
-//        String s3 = s1.intern();
-
-//        System.out.println(new Solution().threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
-//        System.out.println(new Solution().letterCombinations("23"));
-//        StringBuffer sb = new StringBuffer("1234567");
-//        sb.deleteCharAt(2);
-//        sb.append('a');
-//        System.out.println(sb);
-//        ListNode _1 = new ListNode(1);
-//        ListNode _2 = new ListNode(2);
-//        ListNode _3 = new ListNode(3);
-//        ListNode _4 = new ListNode(4);
-//        ListNode _5 = new ListNode(5);
-//        _1.next = _2;
-//        _2.next = _3;
-//        _3.next = _4;
-//        _4.next = _5;
-//        System.out.println(new Solution().removeNthFromEnd(_1,2));
-//        new Solution().nextPermutation(new int[]{1,0,3,5,7,91,65});
-//        System.out.println(new Solution().search(new int[]{4,5,1,2,3},1));
-//        System.out.println(new Solution().canJump1(new int[]{3,2,1,0,4}));
+        System.out.println(pq.poll());
     }
 }
