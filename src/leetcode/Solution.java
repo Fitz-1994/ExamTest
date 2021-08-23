@@ -460,24 +460,24 @@ public class Solution {
      * @param prices
      * @return
      */
-    public int maxProfit(int[] prices) {
-        if (prices.length == 0) {
-            return 0;
-        }
-        int minPrice = prices[0];
-        int max = 0;
-
-        for (int price : prices) {
-            if (price < minPrice) {
-                minPrice = price;
-            }
-            int gap = price - minPrice;
-            if (gap > max) {
-                max = gap;
-            }
-        }
-        return max;
-    }
+//    public int maxProfit(int[] prices) {
+//        if (prices.length == 0) {
+//            return 0;
+//        }
+//        int minPrice = prices[0];
+//        int max = 0;
+//
+//        for (int price : prices) {
+//            if (price < minPrice) {
+//                minPrice = price;
+//            }
+//            int gap = price - minPrice;
+//            if (gap > max) {
+//                max = gap;
+//            }
+//        }
+//        return max;
+}
 
     /**
      * 10. 正则表达式匹配
@@ -1753,23 +1753,64 @@ public class Solution {
         }
     }
 
-    private void preOrder(TreeNode root, List<TreeNode> preOrder) {
-        if (root != null) {
-            preOrder.add(root);
-            preOrder(root.left, preOrder);
-            preOrder(root.right, preOrder);
+        private void preOrder(TreeNode root, List<TreeNode> preOrder) {
+            if (root != null) {
+                preOrder.add(root);
+                preOrder(root.left, preOrder);
+                preOrder(root.right, preOrder);
+            }
         }
-    }
 
-    /**
-     * 215. 数组中的第K个最大元素
-     *
-     * @param nums
-     * @param k
-     * @return
-     */
-    public int findKthLargest(int[] nums, int k) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>(k);
+        /**
+         * 121. 买卖股票的最佳时机
+         *
+         * @param prices
+         * @return
+         */
+        public int maxProfit(int[] prices) {
+            int minPrice = prices[0];
+            int maxProfit = 0;
+            for (int i = 1; i < prices.length; i++) {
+                minPrice = Math.min(minPrice, prices[i]);
+                maxProfit = Math.max(maxProfit, prices[i] - minPrice);
+            }
+            return maxProfit;
+        }
+
+        /**
+         * 128. 最长连续序列
+         *
+         * @param nums
+         * @return
+         */
+        public int longestConsecutive(int[] nums) {
+            Set<Integer> set = new HashSet<>(nums.length);
+            for (int num : nums) {
+                set.add(num);
+            }
+            int max = 0;
+            for (Integer i : set) {
+                if (set.contains(i - 1)) {
+                    continue;
+                }
+                int length = 0;
+                while (set.contains(i + length)) {
+                    length++;
+                }
+                max = Math.max(max, length);
+            }
+            return max;
+        }
+
+        /**
+         * 215. 数组中的第K个最大元素
+         *
+         * @param nums
+         * @param k
+         * @return
+         */
+        public int findKthLargest(int[] nums, int k) {
+            PriorityQueue<Integer> pq = new PriorityQueue<>(k);
         for (int i = 0; i < nums.length; i++) {
             if (i < k) {
                 pq.offer(nums[i]);
