@@ -6,27 +6,28 @@ public class Solution {
     /**
      * 1、两数之和
      * 给定一个整数数组和一个目标值，找出数组中和为目标值的两个数。
-
-     你可以假设每个输入只对应一种答案，且同样的元素不能被重复利用。
-
-     示例:
-
-     给定 nums = [2, 7, 11, 15], target = 9
-
-     因为 nums[0] + nums[1] = 2 + 7 = 9
-     所以返回 [0, 1]
+     * <p>
+     * 你可以假设每个输入只对应一种答案，且同样的元素不能被重复利用。
+     * <p>
+     * 示例:
+     * <p>
+     * 给定 nums = [2, 7, 11, 15], target = 9
+     * <p>
+     * 因为 nums[0] + nums[1] = 2 + 7 = 9
+     * 所以返回 [0, 1]
+     *
      * @param nums
      * @param target
      * @return
      */
     public int[] twoSum(int[] nums, int target) {
-        Map<Integer,Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            Integer index = map.get(target-nums[i]);
-            if (index == null){
-                map.put(nums[i],i);
-            }else {
-                return new int[]{i,index};
+            Integer index = map.get(target - nums[i]);
+            if (index == null) {
+                map.put(nums[i], i);
+            } else {
+                return new int[]{i, index};
             }
         }
         return new int[0];
@@ -35,78 +36,80 @@ public class Solution {
     /**
      * 2、两数相加
      * 给定两个非空链表来表示两个非负整数。位数按照逆序方式存储，它们的每个节点只存储单个数字。将两数相加返回一个新的链表。
-     *
+     * <p>
      * 你可以假设除了数字 0 之外，这两个数字都不会以零开头。
-     *
+     * <p>
      * 示例：
-     *
+     * <p>
      * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
      * 输出：7 -> 0 -> 8
      * 原因：342 + 465 = 807
+     *
      * @param l1
      * @param l2
      * @return
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        return addDiGui(l1,l2,0);
+        return addDiGui(l1, l2, 0);
     }
 
-    private ListNode addDiGui(ListNode l1,ListNode l2,int add){
-        if (l1 == null && l2 == null){
-            if (add == 0){
+    private ListNode addDiGui(ListNode l1, ListNode l2, int add) {
+        if (l1 == null && l2 == null) {
+            if (add == 0) {
                 return null;
-            }else {
+            } else {
                 return new ListNode(1);
             }
         }
-        if (l2 == null){
+        if (l2 == null) {
             l2 = l1;
             l1 = null;
         }
-        if (l1 == null){
+        if (l1 == null) {
             int sum = l2.val + add;
-            if (sum < 10){
+            if (sum < 10) {
                 l2.val = sum;
                 return l2;
-            }else {
+            } else {
                 l2.val = sum % 10;
-                l2.next = addDiGui(null,l2.next,1);
+                l2.next = addDiGui(null, l2.next, 1);
                 return l2;
             }
         }
 
-        int sum = l1.val+l2.val+add;
-        if (sum < 10){
+        int sum = l1.val + l2.val + add;
+        if (sum < 10) {
             l1.val = sum;
             add = 0;
-        }else {
-            l1.val = sum%10;
+        } else {
+            l1.val = sum % 10;
             add = 1;
         }
-        l1.next = addDiGui(l1.next,l2.next,add);
+        l1.next = addDiGui(l1.next, l2.next, add);
         return l1;
     }
 
     /**
      * 3、无重复字符的最长子串
      * 给定一个字符串，找出不含有重复字符的最长子串的长度。
-
-     示例 1:
-
-     输入: "abcabcbb"
-     输出: 3
-     解释: 无重复字符的最长子串是 "abc"，其长度为 3。
-     示例 2:
-
-     输入: "bbbbb"
-     输出: 1
-     解释: 无重复字符的最长子串是 "b"，其长度为 1。
-     示例 3:
-
-     输入: "pwwkew"
-     输出: 3
-     解释: 无重复字符的最长子串是 "wke"，其长度为 3。
-     请注意，答案必须是一个子串，"pwke" 是一个子序列 而不是子串。
+     * <p>
+     * 示例 1:
+     * <p>
+     * 输入: "abcabcbb"
+     * 输出: 3
+     * 解释: 无重复字符的最长子串是 "abc"，其长度为 3。
+     * 示例 2:
+     * <p>
+     * 输入: "bbbbb"
+     * 输出: 1
+     * 解释: 无重复字符的最长子串是 "b"，其长度为 1。
+     * 示例 3:
+     * <p>
+     * 输入: "pwwkew"
+     * 输出: 3
+     * 解释: 无重复字符的最长子串是 "wke"，其长度为 3。
+     * 请注意，答案必须是一个子串，"pwke" 是一个子序列 而不是子串。
+     *
      * @param s
      * @return
      */
@@ -115,13 +118,13 @@ public class Solution {
         int begin = 0;
         int end = 0;
         int max = 0;
-        while (end < s.length()){
+        while (end < s.length()) {
             char endC = s.charAt(end);
-            if (!set.contains(endC)){
+            if (!set.contains(endC)) {
                 set.add(endC);
-                max = Math.max(max,end-begin+1);
+                max = Math.max(max, end - begin + 1);
                 end++;
-            }else {
+            } else {
                 set.remove(s.charAt(begin));
                 begin++;
             }
@@ -132,23 +135,24 @@ public class Solution {
     /**
      * 4、两个排序数组的中位数
      * 给定两个大小为 m 和 n 的有序数组 nums1 和 nums2 。
-     *
+     * <p>
      * 请找出这两个有序数组的中位数。要求算法的时间复杂度为 O(log (m+n)) 。
-     *
+     * <p>
      * 你可以假设 nums1 和 nums2 不同时为空。
-     *
+     * <p>
      * 示例 1:
-     *
+     * <p>
      * nums1 = [1, 3]
      * nums2 = [2]
-     *
+     * <p>
      * 中位数是 2.0
      * 示例 2:
-     *
+     * <p>
      * nums1 = [1, 2]
      * nums2 = [3, 4]
-     *
+     * <p>
      * 中位数是 (2 + 3)/2 = 2.5
+     *
      * @param nums1
      * @param nums2
      * @return
@@ -227,29 +231,29 @@ public class Solution {
         for (int len = 1; len <= length; len++) {
             int lastIndex = length - len;
             for (int i = 0; i <= lastIndex; i++) {
-                if (len == 1){
+                if (len == 1) {
                     p[i][i] = true;
                     continue;
                 }
-                int j = i+len-1;
-                if (len == 2){
-                    p[i][j] = chars[i]==chars[j];
-                    if (p[i][j] && max < 2){
+                int j = i + len - 1;
+                if (len == 2) {
+                    p[i][j] = chars[i] == chars[j];
+                    if (p[i][j] && max < 2) {
                         max = 2;
                         begin = i;
                         end = j;
                     }
                     continue;
                 }
-                p[i][j] = p[i+1][j-1] && chars[i]==chars[j];
-                if (p[i][j] && max<len){
+                p[i][j] = p[i + 1][j - 1] && chars[i] == chars[j];
+                if (p[i][j] && max < len) {
                     max = len;
                     begin = i;
                     end = j;
                 }
             }
         }
-        return s.substring(begin,end+1);
+        return s.substring(begin, end + 1);
     }
 
 
@@ -477,7 +481,7 @@ public class Solution {
 //            }
 //        }
 //        return max;
-}
+//}
 
     /**
      * 10. 正则表达式匹配
@@ -680,6 +684,7 @@ public class Solution {
 
     /**
      * 15. 三数之和
+     *
      * @param nums
      * @return
      */
@@ -687,30 +692,30 @@ public class Solution {
         Arrays.sort(nums);
         List<List<Integer>> result = new ArrayList<>();
         for (int i = 0; i < nums.length; i++) {
-            if (i>0 && nums[i-1]==nums[i]){
+            if (i > 0 && nums[i - 1] == nums[i]) {
                 continue;
             }
-            int k = nums.length-1;
-            for (int j = i+1; j < k; j++) {
-                if (j>i+1 && nums[j-1] == nums[j]){
+            int k = nums.length - 1;
+            for (int j = i + 1; j < k; j++) {
+                if (j > i + 1 && nums[j - 1] == nums[j]) {
                     continue;
                 }
-                int target = -(nums[i]+nums[j]);
-                while (j < k && nums[k] > target){
+                int target = -(nums[i] + nums[j]);
+                while (j < k && nums[k] > target) {
                     k--;
                 }
-                if (j >= k){
+                if (j >= k) {
                     break;
                 }
-                if (nums[k] == target){
-                    result.add(Arrays.asList(nums[i],nums[j],nums[k]));
+                if (nums[k] == target) {
+                    result.add(Arrays.asList(nums[i], nums[j], nums[k]));
                 }
             }
         }
         return result;
     }
 
-//    Map<Character, String> phoneMap = new HashMap<Character, String>() {{
+    //    Map<Character, String> phoneMap = new HashMap<Character, String>() {{
 //        put('2', "abc");
 //        put('3', "def");
 //        put('4', "ghi");
@@ -755,29 +760,31 @@ public class Solution {
         put('8', "tuv");
         put('9', "wxyz");
     }};
+
     public List<String> letterCombinations(String digits) {
         List<String> result = new ArrayList<>();
-        if (digits.length() == 0){
+        if (digits.length() == 0) {
             return result;
         }
-        letterBacktrace(digits,0,result,new StringBuilder());
+        letterBacktrace(digits, 0, result, new StringBuilder());
         return result;
     }
-    private void letterBacktrace(String digits, int index, List<String> result, StringBuilder sb){
+
+    private void letterBacktrace(String digits, int index, List<String> result, StringBuilder sb) {
         char c = digits.charAt(index);
         String letters = phoneMap.get(c);
 
-        if (index == digits.length()-1){
+        if (index == digits.length() - 1) {
             for (int i = 0; i < letters.length(); i++) {
                 sb.append(letters.charAt(i));
                 result.add(sb.toString());
-                sb.deleteCharAt(sb.length()-1);
+                sb.deleteCharAt(sb.length() - 1);
             }
-        }else {
+        } else {
             for (int i = 0; i < letters.length(); i++) {
                 sb.append(letters.charAt(i));
-                letterBacktrace(digits,index+1,result,sb);
-                sb.deleteCharAt(sb.length()-1);
+                letterBacktrace(digits, index + 1, result, sb);
+                sb.deleteCharAt(sb.length() - 1);
             }
         }
     }
@@ -806,15 +813,15 @@ public class Solution {
 //        return head.next;
         List<ListNode> nodeList = new ArrayList<>(30);
         ListNode i = head;
-        while (i != null){
+        while (i != null) {
             nodeList.add(i);
             i = i.next;
         }
-        if (n == nodeList.size()){
+        if (n == nodeList.size()) {
             return head.next;
         }
         int remodeIndex = nodeList.size() - n;
-        nodeList.get(remodeIndex-1).next = nodeList.get(remodeIndex).next;
+        nodeList.get(remodeIndex - 1).next = nodeList.get(remodeIndex).next;
         return head;
     }
 
@@ -822,24 +829,24 @@ public class Solution {
         char[] sArr = s.toCharArray();
         Stack<Character> stack = new Stack<>();
         for (char c : sArr) {
-            switch (c){
+            switch (c) {
                 case '(':
                 case '{':
                 case '[':
                     stack.push(c);
                     break;
                 case ')':
-                    if (stack.isEmpty() || stack.pop() != '('){
+                    if (stack.isEmpty() || stack.pop() != '(') {
                         return false;
                     }
                     break;
                 case '}':
-                    if (stack.isEmpty() || stack.pop() != '{'){
+                    if (stack.isEmpty() || stack.pop() != '{') {
                         return false;
                     }
                     break;
                 case ']':
-                    if (stack.isEmpty() || stack.pop() != '['){
+                    if (stack.isEmpty() || stack.pop() != '[') {
                         return false;
                     }
                     break;
@@ -852,20 +859,20 @@ public class Solution {
     }
 
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if (l1 == null && l2 == null){
+        if (l1 == null && l2 == null) {
             return null;
         }
-        if (l1 == null){
+        if (l1 == null) {
             return l2;
         }
-        if (l2 == null){
+        if (l2 == null) {
             return l1;
         }
-        if (l1.val<l2.val){
-            l1.next = mergeTwoLists(l1.next,l2);
+        if (l1.val < l2.val) {
+            l1.next = mergeTwoLists(l1.next, l2);
             return l1;
-        }else {
-            l2.next = mergeTwoLists(l1,l2.next);
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next);
             return l2;
         }
     }
@@ -873,6 +880,7 @@ public class Solution {
     /**
      * 23. 合并K个升序链表
      * 分治法 + 合并两个数组的的方法
+     *
      * @param lists
      * @return
      */
@@ -893,6 +901,7 @@ public class Solution {
 
     /**
      * 31. 下一个排列
+     *
      * @param nums
      */
     public void nextPermutation(int[] nums) {
@@ -900,13 +909,13 @@ public class Solution {
         int i = nums.length - 2;
         boolean isMax = true;
         for (; i >= 0; i--) {
-            if (nums[i] < nums[i+1]){
+            if (nums[i] < nums[i + 1]) {
                 isMax = false;
                 break;
             }
         }
         // 最大组合 重新排序成最小组合 返回
-        if (isMax){
+        if (isMax) {
             Arrays.sort(nums);
             return;
         }
@@ -916,9 +925,9 @@ public class Solution {
         int nextNumIndex = -1;
 
         //找到第i位后的 大于 num[i]的最小数
-        for (int j = i+1; j < nums.length; j++) {
-            if (nums[j] > nums[i] && (nums[j]-nums[i]) < minGap){
-                minGap = nums[j]-nums[i];
+        for (int j = i + 1; j < nums.length; j++) {
+            if (nums[j] > nums[i] && (nums[j] - nums[i]) < minGap) {
+                minGap = nums[j] - nums[i];
                 nextNumIndex = j;
             }
         }
@@ -929,13 +938,14 @@ public class Solution {
         nums[i] = nums[nextNumIndex];
         nums[nextNumIndex] = temp;
 
-        Arrays.sort(nums,i+1,nums.length);
+        Arrays.sort(nums, i + 1, nums.length);
         System.out.println(nums);
     }
 
     /**
      * 32. 最长有效括号
      *  TODO 未完成
+     *
      * @param s
      * @return
      */
@@ -946,7 +956,7 @@ public class Solution {
         char right = ')';
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == left){
+            if (chars[i] == left) {
                 quotaStack.push(left);
                 builder.append(left);
             }
@@ -957,76 +967,77 @@ public class Solution {
 
     /**
      * 33. 搜索旋转排序数组
+     *
      * @param nums
      * @param target
      * @return
      */
     public int search(int[] nums, int target) {
         /*
-        * 思路：
-        * 先比较nums[0] 与target的大小 ，确定target值在nums旋转点的前半段还是后半段
-        * 然后用二分查找找到旋转点
-        * 然后在target所在的半段数组中进行二分查找
-        * */
-        if (nums.length == 1){
-            return target == nums[0]?0:-1;
+         * 思路：
+         * 先比较nums[0] 与target的大小 ，确定target值在nums旋转点的前半段还是后半段
+         * 然后用二分查找找到旋转点
+         * 然后在target所在的半段数组中进行二分查找
+         * */
+        if (nums.length == 1) {
+            return target == nums[0] ? 0 : -1;
         }
         //先判断没有旋转的情况
         int start = 0;
-        int end = nums.length-1;
+        int end = nums.length - 1;
         int mid = -1;
-        if (nums[nums.length-1] < nums[0]){
+        if (nums[nums.length - 1] < nums[0]) {
             boolean potision;
-            if (target >= nums[0] ){
+            if (target >= nums[0]) {
                 //前半段
                 potision = true;
-            }else {
+            } else {
                 //后半段
                 potision = false;
             }
 
-            while (end>=start){
-                mid = (start+end)/2;
-                if (nums[mid] > nums[mid+1]){
+            while (end >= start) {
+                mid = (start + end) / 2;
+                if (nums[mid] > nums[mid + 1]) {
                     break;
                 }
-                if (nums[mid] >= nums[0]){
-                    start = mid+1;
-                }else {
-                    end = mid-1;
+                if (nums[mid] >= nums[0]) {
+                    start = mid + 1;
+                } else {
+                    end = mid - 1;
                 }
             }
 
             //二分查找
-            if (potision){
+            if (potision) {
                 start = 0;
                 end = mid;
-            }else {
-                start = mid+1;
-                end = nums.length-1;
+            } else {
+                start = mid + 1;
+                end = nums.length - 1;
             }
         }
         //排除大于最大值和小于最小值的情况
-        if (target > nums[end] || target<nums[start]){
+        if (target > nums[end] || target < nums[start]) {
             return -1;
         }
 
-        while (end>=start){
-            mid = (start+end)/2;
-            if (nums[mid] == target){
+        while (end >= start) {
+            mid = (start + end) / 2;
+            if (nums[mid] == target) {
                 return mid;
             }
-            if(nums[mid] > target){
-                end = mid-1;
-            }else {
-                start = mid+1;
+            if (nums[mid] > target) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
             }
         }
         return -1;
     }
 
     public List<List<String>> groupAnagrams(String[] strs) {
-        Map<String,List<String>> resultMap = new HashMap<>();
+        Map<String, List<String>> resultMap = new HashMap<>();
         for (String str : strs) {
             String key = toOrderChar(str);
             List<String> value = resultMap.get(key);
@@ -1034,12 +1045,12 @@ public class Solution {
                 value = new ArrayList<>();
             }
             value.add(str);
-            resultMap.put(key,value);
+            resultMap.put(key, value);
         }
         return new ArrayList<>(resultMap.values());
     }
 
-    private String toOrderChar(String s){
+    private String toOrderChar(String s) {
         char[] sChars = s.toCharArray();
         Arrays.sort(sChars);
         return new String(sChars);
@@ -1050,12 +1061,12 @@ public class Solution {
         int max = nums[0];
 
         for (int i = 0; i < nums.length; i++) {
-            if (i==0){
+            if (i == 0) {
                 maxArr[i] = nums[i];
                 continue;
             }
-            maxArr[i] = Math.max(maxArr[i-1]+nums[i],nums[i]);
-            if (maxArr[i] > max){
+            maxArr[i] = Math.max(maxArr[i - 1] + nums[i], nums[i]);
+            if (maxArr[i] > max) {
                 max = maxArr[i];
             }
         }
@@ -1064,20 +1075,21 @@ public class Solution {
 
     /**
      * 最远可到达位置，自解法，通过维护能否到达数组
+     *
      * @param nums
      * @return
      */
     public boolean canJump(int[] nums) {
-        if (nums.length == 1){
+        if (nums.length == 1) {
             return true;
         }
 
         boolean[] resArr = new boolean[nums.length];
-        resArr[nums.length-1] = true;
-        for (int i = nums.length-2; i >=0 ; i--) {
+        resArr[nums.length - 1] = true;
+        for (int i = nums.length - 2; i >= 0; i--) {
             resArr[i] = false;
             for (int j = 1; j <= nums[i]; j++) {
-                if (resArr[i+j]){
+                if (resArr[i + j]) {
                     resArr[i] = true;
                     break;
                 }
@@ -1089,10 +1101,10 @@ public class Solution {
     public boolean canJump1(int[] nums) {
         int maxReachLength = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (i<=maxReachLength){
-                maxReachLength = Math.max(maxReachLength,i+nums[i]);
+            if (i <= maxReachLength) {
+                maxReachLength = Math.max(maxReachLength, i + nums[i]);
             }
-            if (maxReachLength >= nums.length-1){
+            if (maxReachLength >= nums.length - 1) {
                 return true;
             }
         }
@@ -1101,29 +1113,30 @@ public class Solution {
 
     /**
      * 48. 旋转图像
+     *
      * @param matrix
      */
     public void rotate(int[][] matrix) {
-        if (matrix.length == 1){
+        if (matrix.length == 1) {
             return;
         }
         int n = matrix.length;
         // 水平翻转
         for (int i = 0; i < n / 2; i++) {
-            int reverseLine = n-1-i;
+            int reverseLine = n - 1 - i;
             for (int j = 0; j < n; j++) {
-                repleace(matrix,i,j,reverseLine,j);
+                repleace(matrix, i, j, reverseLine, j);
             }
         }
 
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < i; j++) {
-                repleace(matrix,i,j,j,i);
+                repleace(matrix, i, j, j, i);
             }
         }
     }
 
-    private void repleace(int[][] matrix,int i1,int j1,int i2,int j2){
+    private void repleace(int[][] matrix, int i1, int j1, int i2, int j2) {
         int temp = matrix[i1][j1];
         matrix[i1][j1] = matrix[i2][j2];
         matrix[i2][j2] = temp;
@@ -1131,6 +1144,7 @@ public class Solution {
 
     /**
      * 56. 合并区间
+     *
      * @param intervals
      * @return
      */
@@ -1142,14 +1156,14 @@ public class Solution {
             int[] interval = intervals[i];
             // 合并区间
             if (interval[0] <= currInterval[1]) {
-                currInterval[1] = Math.max(currInterval[1],interval[1]);
+                currInterval[1] = Math.max(currInterval[1], interval[1]);
                 continue;
             }
             //不合并
             result.add(currInterval);
             currInterval = interval;
         }
-        if (currInterval[0] != -1){
+        if (currInterval[0] != -1) {
             result.add(currInterval);
         }
         int[][] arrResult = new int[result.size()][2];
@@ -1161,6 +1175,7 @@ public class Solution {
 
     /**
      * 剑指 Offer II 024. 反转链表
+     *
      * @param head
      * @return
      */
@@ -1172,7 +1187,7 @@ public class Solution {
         return last;
     }
 
-    private ListNode reverDigui(ListNode head){
+    private ListNode reverDigui(ListNode head) {
         if (head.next == null) return head;
         ListNode last = reverDigui(head.next);
         head.next.next = head;
@@ -1182,37 +1197,38 @@ public class Solution {
 
     /**
      * 92. 反转链表 II
+     *
      * @param head
      * @param left
      * @param right
      * @return
      */
     public ListNode reverseBetween(ListNode head, int left, int right) {
-        if (head.next == null){
+        if (head.next == null) {
             return head;
         }
-        if (left == right){
+        if (left == right) {
             return head;
         }
-        int pre = left-1;
-        int after = right+1;
+        int pre = left - 1;
+        int after = right + 1;
         ListNode preNode = null;
         ListNode leftNode = null;
         ListNode rightNode = null;
         ListNode afterNode = null;
         int i = 1;
         ListNode index = head;
-        while (i <= after){
-            if (i == pre){
+        while (i <= after) {
+            if (i == pre) {
                 preNode = index;
-            }else if (i == left){
+            } else if (i == left) {
                 leftNode = index;
-            }else if (i == right){
+            } else if (i == right) {
                 rightNode = index;
-            }else if (i == after){
+            } else if (i == after) {
                 afterNode = index;
             }
-            if (i < after){
+            if (i < after) {
                 index = index.next;
             }
             i++;
@@ -1222,73 +1238,74 @@ public class Solution {
         ListNode mid = leftNode;
         ListNode next = leftNode.next;
         for (int j = 0; j < right - left + 1; j++) {
-            if (j == 0){
+            if (j == 0) {
                 mid.next = afterNode;
-            }else {
+            } else {
                 mid.next = before;
             }
             before = mid;
             mid = next;
-            if (next != null){
+            if (next != null) {
                 next = next.next;
             }
         }
-        if (preNode != null){
+        if (preNode != null) {
             preNode.next = rightNode;
             return head;
-        }else {
+        } else {
             return rightNode;
         }
     }
 
     /**
      * 25. K 个一组翻转链表
+     *
      * @param head
      * @param k
      * @return
      */
     public ListNode reverseKGroup(ListNode head, int k) {
-        if (k == 1){
+        if (k == 1) {
             return head;
         }
         ListNode p = head;
-        int i=1;
-        while (i < k && p != null){
+        int i = 1;
+        while (i < k && p != null) {
             p = p.next;
             i++;
         }
-        if (p == null){
+        if (p == null) {
             return head;
         }
-        if (i < k+1){
+        if (i < k + 1) {
             return head;
         }
-        if (p.next != null){
-            p.next = reverseKGroup(p.next,k);
+        if (p.next != null) {
+            p.next = reverseKGroup(p.next, k);
         }
-        return reverseFrontK(head,k);
+        return reverseFrontK(head, k);
     }
 
-    private ListNode reverseFrontK(ListNode head,int k){
+    private ListNode reverseFrontK(ListNode head, int k) {
         ListNode p = head;
-        int i=0;
-        while (p != null){
+        int i = 0;
+        while (p != null) {
             p = p.next;
             i++;
         }
-        if (i < k){
+        if (i < k) {
             return head;
         }
 
         ListNode pre = null;
         p = head;
         ListNode next = head.next;
-        i=0;
-        while (i<k){
+        i = 0;
+        while (i < k) {
             p.next = pre;
             pre = p;
             p = next;
-            if (next != null){
+            if (next != null) {
                 next = next.next;
             }
             i++;
@@ -1299,11 +1316,12 @@ public class Solution {
 
     /**
      * 141. 环形链表
+     *
      * @param head
      * @return
      */
     public boolean hasCycle(ListNode head) {
-        if (head == null){
+        if (head == null) {
             return false;
         }
 
@@ -1311,22 +1329,23 @@ public class Solution {
         ListNode fast = head;
         do {
             slow = slow.next;
-            if (fast!=null &&fast.next !=null){
+            if (fast != null && fast.next != null) {
                 fast = fast.next.next;
-            }else {
+            } else {
                 return false;
             }
-        }while (slow != fast);
+        } while (slow != fast);
         return true;
     }
 
     /**
      * 142. 环形链表 II
+     *
      * @param head
      * @return
      */
     public ListNode detectCycle(ListNode head) {
-        if (head == null){
+        if (head == null) {
             return null;
         }
 
@@ -1334,45 +1353,45 @@ public class Solution {
         ListNode fast = head;
         do {
             slow = slow.next;
-            if (fast!=null &&fast.next !=null){
+            if (fast != null && fast.next != null) {
                 fast = fast.next.next;
-            }else {
+            } else {
                 return null;
             }
-        }while (slow != fast);
+        } while (slow != fast);
         ListNode cyclePoint = head;
-        while (cyclePoint != slow){
+        while (cyclePoint != slow) {
             cyclePoint = cyclePoint.next;
             slow = slow.next;
         }
         return cyclePoint;
     }
 
-    public List<List<Integer>> combinationSum(int[] candidates,int target){
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
         Arrays.sort(candidates);
         List<List<Integer>> result = new ArrayList<>();
-        backTrace(result,candidates,target, new ArrayList(),0,0);
+        backTrace(result, candidates, target, new ArrayList(), 0, 0);
         return result;
     }
 
-    private void backTrace(List<List<Integer>> result, int[] candidates, int target, List<Integer> curList, int index,int sum ){
+    private void backTrace(List<List<Integer>> result, int[] candidates, int target, List<Integer> curList, int index, int sum) {
         //回溯基本结构
         for (int i = index; i < candidates.length; i++) {
             curList.add(candidates[i]);
-            int curSum = sum+candidates[i];
+            int curSum = sum + candidates[i];
             if (curSum == target) {
                 List<Integer> oneResult = new ArrayList<>(curList);
                 result.add(oneResult);
                 curList.remove(curList.size() - 1);
             } else if (curSum < target) {
                 int gap = target - curSum;
-                if (gap < candidates[i]){
+                if (gap < candidates[i]) {
                     curList.remove(curList.size() - 1);
                     continue;
                 }
-                backTrace(result, candidates, target, curList, i,curSum);
+                backTrace(result, candidates, target, curList, i, curSum);
                 curList.remove(curList.size() - 1);
-            }else {
+            } else {
                 curList.remove(curList.size() - 1);
                 break;
             }
@@ -1386,11 +1405,11 @@ public class Solution {
             curList.add(nums[i]);
         }
         int n = nums.length;
-        permuteBt(n,res,curList,0);
+        permuteBt(n, res, curList, 0);
         return res;
     }
 
-    private void permuteBt(int n, List<List<Integer>> res,List<Integer> curList,int index){
+    private void permuteBt(int n, List<List<Integer>> res, List<Integer> curList, int index) {
         if (index == n - 1) {
             res.add(new ArrayList<>(curList));
             return;
@@ -1717,6 +1736,7 @@ public class Solution {
      * @return
      */
     private static Map<Integer, Integer> inOrderMap;
+
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         inOrderMap = new HashMap<>(inorder.length);
         for (int i = 0; i < inorder.length; i++) {
@@ -1753,64 +1773,81 @@ public class Solution {
         }
     }
 
-        private void preOrder(TreeNode root, List<TreeNode> preOrder) {
-            if (root != null) {
-                preOrder.add(root);
-                preOrder(root.left, preOrder);
-                preOrder(root.right, preOrder);
+    private void preOrder(TreeNode root, List<TreeNode> preOrder) {
+        if (root != null) {
+            preOrder.add(root);
+            preOrder(root.left, preOrder);
+            preOrder(root.right, preOrder);
+        }
+    }
+
+    /**
+     * 121. 买卖股票的最佳时机
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        int minPrice = prices[0];
+        int maxProfit = 0;
+        for (int i = 1; i < prices.length; i++) {
+            minPrice = Math.min(minPrice, prices[i]);
+            maxProfit = Math.max(maxProfit, prices[i] - minPrice);
+        }
+        return maxProfit;
+    }
+
+    /**
+     * 128. 最长连续序列
+     *
+     * @param nums
+     * @return
+     */
+    public int longestConsecutive(int[] nums) {
+        Set<Integer> set = new HashSet<>(nums.length);
+        for (int num : nums) {
+            set.add(num);
+        }
+        int max = 0;
+        for (Integer i : set) {
+            if (set.contains(i - 1)) {
+                continue;
+            }
+            int length = 0;
+            while (set.contains(i + length)) {
+                length++;
+            }
+            max = Math.max(max, length);
+        }
+        return max;
+    }
+
+    /**
+     * 136. 只出现一次的数字
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNumber(int[] nums) {
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 1; i += 2) {
+            if (nums[i] != nums[i + 1]) {
+                return nums[i];
             }
         }
+        return nums[nums.length - 1];
+    }
 
-        /**
-         * 121. 买卖股票的最佳时机
-         *
-         * @param prices
-         * @return
-         */
-        public int maxProfit(int[] prices) {
-            int minPrice = prices[0];
-            int maxProfit = 0;
-            for (int i = 1; i < prices.length; i++) {
-                minPrice = Math.min(minPrice, prices[i]);
-                maxProfit = Math.max(maxProfit, prices[i] - minPrice);
-            }
-            return maxProfit;
-        }
 
-        /**
-         * 128. 最长连续序列
-         *
-         * @param nums
-         * @return
-         */
-        public int longestConsecutive(int[] nums) {
-            Set<Integer> set = new HashSet<>(nums.length);
-            for (int num : nums) {
-                set.add(num);
-            }
-            int max = 0;
-            for (Integer i : set) {
-                if (set.contains(i - 1)) {
-                    continue;
-                }
-                int length = 0;
-                while (set.contains(i + length)) {
-                    length++;
-                }
-                max = Math.max(max, length);
-            }
-            return max;
-        }
-
-        /**
-         * 215. 数组中的第K个最大元素
-         *
-         * @param nums
-         * @param k
-         * @return
-         */
-        public int findKthLargest(int[] nums, int k) {
-            PriorityQueue<Integer> pq = new PriorityQueue<>(k);
+    /**
+     * 215. 数组中的第K个最大元素
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(k);
         for (int i = 0; i < nums.length; i++) {
             if (i < k) {
                 pq.offer(nums[i]);
