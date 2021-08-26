@@ -1838,6 +1838,57 @@ public class Solution {
         return nums[nums.length - 1];
     }
 
+    /**
+     * 139. 单词拆分
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> wordSet = new HashSet<>(wordDict);
+        for (int i = 0; i < s.length(); ) {
+            for (int j = i + 1; j <= s.length(); j++) {
+                if (wordSet.contains(s.substring(i, j))) {
+                    i = j;
+                    break;
+                }
+                if (j == s.length()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 6. Z 字形变换
+     *
+     * @param s
+     * @param numRows
+     * @return
+     */
+    public String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+
+        char[] sChars = s.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        int oneLoop = 2 * numRows - 2;
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j + i < sChars.length; j += oneLoop) {
+                sb.append(sChars[j + i]);
+                if (i > 0 && i < numRows - 1 && j + oneLoop - i < sChars.length) {
+                    sb.append(sChars[j + oneLoop - i]);
+                }
+            }
+        }
+        return sb.toString();
+    }
+
 
     /**
      * 215. 数组中的第K个最大元素
@@ -1866,13 +1917,6 @@ public class Solution {
 
 
     public static void main(String[] args) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        pq.offer(1);
-        pq.offer(2);
-        pq.offer(3);
-        pq.offer(4);
-        pq.offer(5);
-
-        System.out.println(pq.poll());
+        System.out.println(new Solution().wordBreak("leetcode", Arrays.asList("leet","code")));
     }
 }
